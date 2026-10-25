@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国会質疑トーク（仮称）｜国民民主党の質疑が1分で読める</title>
+<meta name="description" content="国民民主党の国会質疑を、トーク画面のような形で1分で読める要約サイト（非公式）">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; background: #dfe5ea; color: #222; }
+  .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #fff; display: flex; flex-direction: column; box-shadow: 0 0 24px rgba(0,0,0,.12); }
+  header { position: sticky; top: 0; z-index: 10; background: #243447; color: #fff; padding: 14px 16px 10px; }
+  header h1 { font-size: 19px; letter-spacing: .02em; }
+  header p { font-size: 11px; opacity: .75; margin-top: 3px; }
+  .search { padding: 10px 12px; background: #f2f4f6; border-bottom: 1px solid #e2e7ec; }
+  .search input { width: 100%; padding: 9px 12px; border: 1px solid #ccd4dc; border-radius: 999px; font-size: 14px; background: #fff; }
+  .talk-list { flex: 1; }
+  .talk { display: flex; gap: 11px; padding: 12px; border-bottom: 1px solid #edf0f3; cursor: pointer; align-items: flex-start; }
+  .talk:active { background: #f2f7f5; }
+  .avatar { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #5b7186; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; }
+  .avatar.new { background: #0e7c66; }
+  .talk-main { flex: 1; min-width: 0; }
+  .talk-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .talk-name { font-weight: 700; font-size: 15px; }
+  .talk-date { font-size: 11px; color: #8a97a3; flex: none; margin-left: 8px; }
+  .talk-preview { font-size: 12.5px; color: #66727d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+  .badge { flex: none; min-width: 19px; height: 19px; border-radius: 999px; background: #e5484d; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 5px; margin-top: 16px; }
+  footer { padding: 14px 16px 20px; font-size: 11px; color: #77828c; background: #f7f9fa; line-height: 1.7; }
+  /* thread */
+  .thread-head { display: flex; align-items: center; gap: 10px; }
+  .back { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 2px 4px; }
+  .thread-body { flex: 1; background: #a9bfd4; padding: 14px 12px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .date-chip { align-self: center; background: rgba(0,0,0,.28); color: #fff; font-size: 11px; border-radius: 999px; padding: 3px 12px; }
+  .committee-chip { align-self: center; background: rgba(255,255,255,.85); color: #44586c; font-size: 11px; border-radius: 999px; padding: 3px 12px; }
+  .card { background: #fffbe9; border: 1px solid #e8d98a; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.65; }
+  .card b.label { display: inline-block; background: #b8860b; color: #fff; font-size: 11px; border-radius: 6px; padding: 1px 7px; margin-bottom: 5px; }
+  .memo { background: #eef6f3; border: 1px solid #bcd9cf; }
+  .memo b.label { background: #0e7c66; }
+  .row { display: flex; gap: 8px; align-items: flex-start; max-width: 88%; }
+  .row.right { align-self: flex-end; flex-direction: row-reverse; }
+  .row.left { align-self: flex-start; }
+  .mini-avatar { flex: none; width: 32px; height: 32px; border-radius: 50%; background: #5b7186; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+  .bubble-wrap { min-width: 0; }
+  .speaker { font-size: 11px; color: #33475c; margin: 0 2px 3px; }
+  .row.right .speaker { text-align: right; }
+  .bubble { font-size: 13.5px; line-height: 1.6; padding: 8px 11px; border-radius: 14px; background: #fff; }
+  .row.right .bubble { background: #0e7c66; color: #fff; }
+  .full-link { align-self: stretch; text-align: center; background: #243447; color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 11px; }
+  .pending { background: #fff; border-radius: 12px; padding: 12px; font-size: 13px; line-height: 1.7; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ===== Talk list ===== -->
+  <div id="listView">
+    <header>
+      <h1>国会質疑トーク</h1>
+      <p>国民民主党の質疑が1分で読める（非公式）</p>
+    </header>
+    <div class="search"><input id="searchBox" type="search" placeholder="議員名やキーワードで検索"></div>
+    <div class="talk-list" id="talkList"></div>
+    <footer>
+      このサイトは、国民民主党の文字起こしを行う個人による<strong>非公式</strong>の要約サイトです。党の公式サイトではありません。<br>
+      要約は正確さに努めていますが、正確な発言内容は全文文字起こしと公式の国会会議録をご確認ください。
+    </footer>
+  </div>
+
+  <!-- ===== Thread ===== -->
+  <div id="threadView" class="hidden" style="display:none;flex-direction:column;min-height:100vh;">
+    <header>
+      <div class="thread-head">
+        <button class="back" id="backBtn" aria-label="戻る">‹</button>
+        <div>
+          <h1 id="threadName" style="font-size:17px;"></h1>
+          <p id="threadSub"></p>
+        </div>
+      </div>
+    </header>
+    <div class="thread-body" id="threadBody"></div>
+  </div>
+</div>
+
+<script>
+const MEMBERS = [
+  {
+    id: "furukawa", name: "古川元久", initial: "古", dateLabel: "10/23", unread: 1,
+    preview: "「いくらもらえるか」が決まらない法案。金額はこの日も示されず",
+    articles: [{
+      date: "2026年10月23日", committee: "衆議院・財務金融委員会",
+      title: "「いくらもらえるか」が決まらない法案を問う",
+      summary: "論点は3つ。支援金の金額の決め方／国民会議の再開／消費税減税への懸念と結果責任。",
+      noteUrl: "https://note.com/tamakitext/n/ndced83e8aa38",
+      bubbles: [
+        { side: "left",  speaker: "古川元久", text: "社会保障国民会議は、中間取りまとめで終わっていないはずだ。再開して議論を続けるのか。" },
+        { side: "right", speaker: "片山財務大臣", text: "法案審議を踏まえ、参加各党とよく相談したい。要請は重く受け止め、総理に伝える。" },
+        { side: "left",  speaker: "古川元久", text: "本丸は給付付き税額控除だ。減税がない給付は、税額控除とは言えない。支援金はそのつなぎに過ぎない。" },
+        { side: "right", speaker: "片山財務大臣", text: "本丸への第1歩という認識はある。一夜城ではなく、本丸につながる城として作りたい。" },
+        { side: "left",  speaker: "古川元久", text: "支援金の金額が法案に書かれていない。形を一緒に決めた以上、数字を決める過程にも各党を関与させるべきだ。" },
+        { side: "right", speaker: "片山財務大臣", text: "金額を政令で定めるのは前例もある。予算編成過程で具体化していく。" },
+        { side: "left",  speaker: "古川元久", text: "消費税は、法律上は転嫁も価格変更も義務ではない。それなのに運用と「空気」が事業者を追い込んでいないか。" },
+        { side: "right", speaker: "植松主税局長", text: "消費税法上、転嫁や価格変更を義務づける規定はありません。イートインとテイクアウトを同じ価格にすることも禁止されていません。" },
+        { side: "left",  speaker: "古川元久", text: "懸念が払拭されないまま進めるなら、結果責任が問われる。強い思いだけで懸念が払拭されるわけではない。" },
+        { side: "right", speaker: "片山財務大臣", text: "懸念は承知している。重い責任を持って答えを出す。" }
+      ],
+      memo: "結局、金額も国民会議再開の確約も示されず。次は予算編成過程と、法案審議の続きが焦点。"
+    }]
+  },
+  { id: "tanaka", name: "田中けん", initial: "田", dateLabel: "10/23", unread: 0,
+    preview: "支援金、決めたのは国なのに確認から振込まで市町村任せ",
+    articles: [{ date: "2026年10月23日", title: "支援金、決めたのは国なのに、所得の確認から振込まで市町村任せ", pending: true }] },
+  { id: "okano", name: "岡野純子", initial: "岡", dateLabel: "10/23", unread: 0,
+    preview: "日本の薬は外国頼み？ 海外トラブルで「薬難民」が生まれる訳",
+    articles: [{ date: "2026年10月23日", title: "日本の薬、実は外国頼み？ 海外のトラブル1つで「薬難民」が生まれる訳", pending: true }] },
+  { id: "hino", name: "日野さりあ", initial: "日", dateLabel: "10/23", unread: 0,
+    preview: "発達障害の早期受診が“将来の落とし穴”になる矛盾",
+    articles: [{ date: "2026年10月23日", title: "発達障害の早期受診が“将来の落とし穴”になる矛盾。親の叫びに対する大臣の答弁は", pending: true }] },
+  { id: "ido", name: "井戸まさえ", initial: "井", dateLabel: "10/23", unread: 0,
+    preview: "紙のルールに縛られる子どもたち。韓国の「保護出産」から考える日本の壁",
+    articles: [{ date: "2026年10月23日", title: "紙のルールに縛られ取り残される子どもたちへ。韓国の「保護出産」事例から考える日本の壁", pending: true }] },
+  { id: "asano", name: "浅野さとし", initial: "浅", dateLabel: "10/23", unread: 0,
+    preview: "裁量労働制の拡大に待った。「本当の成果」で評価すべき",
+    articles: [{ date: "2026年10月23日", title: "裁量労働制の拡大議論に待った。労働時間の帳尻合わせではなく「本当の成果」で評価すべき", pending: true }] },
+  { id: "usuki", name: "臼木ひでたけ", initial: "臼", dateLabel: "10/23", unread: 0,
+    preview: "北海道の赤字路線から船員教育まで、暮らしのライフラインを問い直す",
+    articles: [{ date: "2026年10月23日", title: "北海道の赤字路線から船員教育まで、暮らしのライフラインを問い直す", pending: true }] },
+  { id: "iizumi", name: "飯泉嘉門", initial: "飯", dateLabel: "10/23", unread: 0,
+    preview: "再犯した人の7割が無職という現実。仕事がなければ人はやり直せないのか",
+    articles: [{ date: "2026年10月23日", title: "再犯した人の7割が無職という現実。仕事がなければ人はやり直せないのか", pending: true }] },
+  { id: "hashimoto", name: "橋本みきひこ", initial: "橋", dateLabel: "10/23", unread: 0,
+    preview: "部品を取り合って飛ぶ戦闘機。元自衛官が暴く防衛現場のリアル",
+    articles: [{ date: "2026年10月23日", title: "部品を取り合って飛ぶ戦闘機—元自衛官が暴く防衛現場のリアル", pending: true }] }
+];
+
+const NOTE_TOP = "https://note.com/tamakitext";
+const talkList = document.getElementById("talkList");
+const listView = document.getElementById("listView");
+const threadView = document.getElementById("threadView");
+
+function renderList(filter = "") {
+  talkList.innerHTML = "";
+  MEMBERS
+    .filter(m => (m.name + m.preview).includes(filter))
+    .forEach(m => {
+      const row = document.createElement("div");
+      row.className = "talk";
+      row.innerHTML =
+        '<div class="avatar' + (m.unread ? " new" : "") + '">' + m.initial + "</div>" +
+        '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + m.name + '</span>' +
+        '<span class="talk-date">' + m.dateLabel + "</span></div>" +
+        '<div class="talk-preview">' + m.preview + "</div></div>" +
+        (m.unread ? '<div class="badge">' + m.unread + "</div>" : "");
+      row.addEventListener("click", () => openThread(m));
+      talkList.appendChild(row);
+    });
+  if (!talkList.children.length) {
+    talkList.innerHTML = '<div style="padding:22px;text-align:center;color:#8a97a3;font-size:13px;">見つかりませんでした</div>';
+  }
+}
+
+function openThread(member) {
+  document.getElementById("threadName").textContent = member.name;
+  const body = document.getElementById("threadBody");
+  body.innerHTML = "";
+  member.articles.forEach(a => {
+    document.getElementById("threadSub").textContent = a.committee || "国会質疑";
+    const date = document.createElement("div");
+    date.className = "date-chip"; date.textContent = a.date;
+    body.appendChild(date);
+    if (a.committee) {
+      const c = document.createElement("div");
+      c.className = "committee-chip"; c.textContent = a.committee;
+      body.appendChild(c);
+    }
+    if (a.pending) {
+      const p = document.createElement("div");
+      p.className = "pending";
+      p.innerHTML = "<strong>" + a.title + "</strong><br>この記事の吹き出し要約は準備中です。全文はnoteで読めます。";
+      body.appendChild(p);
+      const link = document.createElement("a");
+      link.className = "full-link"; link.href = NOTE_TOP; link.target = "_blank"; link.rel = "noopener";
+      link.textContent = "noteで全文を読む";
+      body.appendChild(link);
+      return;
+    }
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = '<b class="label">1分要約</b><br><strong>' + a.title + "</strong><br>" + a.summary;
+    body.appendChild(card);
+    a.bubbles.forEach(b => {
+      const row = document.createElement("div");
+      row.className = "row " + b.side;
+      const isRight = b.side === "right";
+      row.innerHTML =
+        (isRight ? "" : '<div class="mini-avatar">' + member.initial + "</div>") +
+        '<div class="bubble-wrap"><div class="speaker">' + b.speaker + '</div><div class="bubble">' + b.text + "</div></div>";
+      body.appendChild(row);
+    });
+    const memo = document.createElement("div");
+    memo.className = "card memo";
+    memo.innerHTML = '<b class="label">むぎのメモ</b><br>' + a.memo;
+    body.appendChild(memo);
+    const link = document.createElement("a");
+    link.className = "full-link"; link.href = a.noteUrl; link.target = "_blank"; link.rel = "noopener";
+    link.textContent = "全文文字起こしを読む（note）";
+    body.appendChild(link);
+  });
+  listView.style.display = "none";
+  threadView.style.display = "flex";
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("backBtn").addEventListener("click", () => {
+  threadView.style.display = "none";
+  listView.style.display = "";
+});
+document.getElementById("searchBox").addEventListener("input", e => renderList(e.target.value.trim()));
+renderList();
+</script>
+</body>
+</html>
