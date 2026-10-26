@@ -107,8 +107,8 @@ mark.hit.current{background:#ff7b00;color:#fff;}
     </header>
     <div class="search"><input id="searchBox" type="search" placeholder="議員名やキーワードで検索"></div>
     <div class="tabs">
-      <button class="tab active" id="tabMembers">議員で見る</button>
-      <button class="tab" id="tabCats">テーマで見る</button>
+      <button class="tab active" id="tabCats">テーマで見る</button>
+      <button class="tab" id="tabMembers">議員で見る</button>
     </div>
     <div class="talk-list" id="talkList"></div>
     <footer>
@@ -216,7 +216,7 @@ const talkList = document.getElementById("talkList");
 const listView = document.getElementById("listView");
 const threadView = document.getElementById("threadView");
 
-let currentTab = "members";
+let currentTab = "cats";
 function renderList(filter = "") {
   talkList.innerHTML = "";
   if (currentTab === "members") {
