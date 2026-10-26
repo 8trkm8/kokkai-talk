@@ -170,7 +170,7 @@ const MEMBERS = [
       memo: "この日の収穫は、「リフレ政策ではない」「日銀の自主性を尊重する」を総理自身が明言したことと、所得税控除の物価連動という具体策。一方で支援金の金額・対象、農家給付の具体像、外食支援はすべて「予算編成過程で具体化」に先送りされ、応急修理の特別基準引き上げと補正予算には答弁自体がなかった。次は支援金法案の審議で、金額と対象年収が示されるかどうかを追う。"
     }, {
       date: "2026年10月22日", committee: "衆議院・憲法審査会",
-      cats: ["defense", "justice"],
+      cats: ["defense", "justice"], entrance: true,
       title: "欧州3か国の憲法と国民投票を調査——海外調査の報告と各党の受け止め",
       summary: "憲法審査会の調査団（自民・中道・維新・国民民主・チームみらいの7名）がスイス、ハンガリー、イタリアを訪問した海外調査の報告と、各党委員の意見表明。政府への質疑ではなく、この日に結論や合意はなし。「徴兵」への言及はすべて各国の制度説明の報告で、日本への導入提案ではない。",
       noteUrl: "https://note.com/tamakitext/n/nf18e5c63411c",
@@ -662,7 +662,11 @@ function openCategory(catId) {
   document.getElementById("threadSub").textContent = "テーマ別の質疑";
   const body = document.getElementById("threadBody");
   body.innerHTML = "";
-  group.forEach(m => m.articles.forEach(a => { if (!a.cats || a.cats.includes(catId)) renderArticle(body, m, a); }));
+  const seenRoom = new Set();
+  const roomItems = [];
+  group.forEach(m => m.articles.forEach(a => { if (!a.cats || a.cats.includes(catId)) roomItems.push({ m, a }); }));
+  roomItems.sort((x, y) => (x.a.entrance ? 1 : 0) - (y.a.entrance ? 1 : 0));
+  roomItems.forEach(({ m, a }) => { const key = a.fullUrl || a.noteUrl || a.title; if (seenRoom.has(key)) return; seenRoom.add(key); renderArticle(body, m, a); });
   document.getElementById("findInput").value = ""; clearHits();
   document.getElementById("threadPlaceholder").style.display = "none";
   if (!isDesktop()) listView.style.display = "none";
