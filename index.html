@@ -59,6 +59,16 @@
 .findbar .count{flex:none;font-size:12px;color:#55606a;min-width:38px;text-align:center;}
 mark.hit{background:#f5b500;color:#222;border-radius:2px;padding:0 1px;}
 mark.hit.current{background:#ff7b00;color:#fff;}
+.placeholder{display:none;}
+@media (min-width: 900px) {
+  .app { max-width: 1120px; flex-direction: row; align-items: stretch; }
+  #listView { flex: none; width: 380px; border-right: 1px solid #dbe3ea; display: flex; flex-direction: column; height: 100vh; }
+  #listView .talk-list { flex: 1; overflow-y: auto; }
+  #threadView { flex: 1; min-width: 0; height: 100vh; }
+  #threadView .thread-body { overflow-y: auto; }
+  #threadView .back { display: none; }
+  .placeholder { display: flex; flex: 1; align-items: center; justify-content: center; color: #66727d; font-size: 14px; background: #b9c9dd; }
+}
 </style>
 </head>
 <body>
@@ -98,6 +108,7 @@ mark.hit.current{background:#ff7b00;color:#fff;}
       <button id="findPrev" type="button">↑</button>
       <button id="findNext" type="button">↓</button>
     </div>
+    <div class="placeholder" id="threadPlaceholder">左のトークを選ぶと、ここに質疑が表示されます</div>
     <div class="thread-body" id="threadBody"></div>
   </div>
 </div>
@@ -295,7 +306,8 @@ function openCategory(catId) {
   body.innerHTML = "";
   group.forEach(m => m.articles.forEach(a => renderArticle(body, m, a)));
   document.getElementById("findInput").value = ""; clearHits();
-  listView.style.display = "none";
+  document.getElementById("threadPlaceholder").style.display = "none";
+  if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
 }
@@ -307,15 +319,30 @@ function openThread(member) {
   body.innerHTML = "";
   member.articles.forEach(a => renderArticle(body, member, a));
   document.getElementById("findInput").value = ""; clearHits();
-  listView.style.display = "none";
+  document.getElementById("threadPlaceholder").style.display = "none";
+  if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
 }
 
+function isDesktop() { return window.matchMedia("(min-width: 900px)").matches; }
 document.getElementById("backBtn").addEventListener("click", () => {
+  if (isDesktop()) return;
   threadView.style.display = "none";
   listView.style.display = "";
 });
+function syncLayout() {
+  if (isDesktop()) {
+    listView.style.display = "";
+    threadView.style.display = "flex";
+  } else {
+    if (threadView.style.display === "flex" && document.getElementById("threadBody").children.length) {
+      listView.style.display = "none";
+    }
+  }
+}
+window.addEventListener("resize", syncLayout);
+syncLayout();
 document.getElementById("searchBox").addEventListener("input", e => renderList(e.target.value.trim()));
 document.getElementById("tabMembers").addEventListener("click", () => setTab("members"));
 document.getElementById("tabCats").addEventListener("click", () => setTab("cats"));
