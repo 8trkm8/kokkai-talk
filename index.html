@@ -276,6 +276,7 @@ function renderList(filter = "") {
       .filter(({ cat, entries }) => (cat.label + entries.map(e => e.member.name + (e.entry.preview || e.member.preview)).join("")).includes(filter))
       .forEach(({ cat, entries }) => {
         const first = entries[0];
+        const newCount = entries.filter(e => showBadge(e.member)).length;
         const row = document.createElement("div");
         row.className = "talk";
         row.dataset.key = cat.id;
@@ -284,7 +285,8 @@ function renderList(filter = "") {
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + cat.label + '</span>' +
           '<span class="talk-date">' + first.member.dateLabel + "</span></div>" +
           '<div class="talk-preview">' + (first.entry.preview || first.member.preview) + "（" + first.member.name + "）</div>" +
-          '<div class="cat-meta">質疑 ' + entries.length + "件</div></div>";
+          '<div class="cat-meta">質疑 ' + entries.length + "件</div></div>" +
+          (newCount ? '<div class="badge">' + newCount + "</div>" : "");
         row.addEventListener("click", () => openCategory(cat.id));
         talkList.appendChild(row);
       });
