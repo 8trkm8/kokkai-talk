@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>国会質疑トーク（仮称）｜国民民主党の質疑が1分で読める</title>
-<link rel="icon" href="kokuusa.png">
+<link rel="icon" href="kokuusa-icon.png">
 <meta name="description" content="国民民主党の国会質疑を、トーク画面のような形で1分で読める要約サイト（非公式）">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -20,6 +20,14 @@
   .talk:active { background: #f2f7f5; }
   .avatar { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #5b7186; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; }
   .avatar.new { background: #f5b500; color: #043e80; }
+.avatar.pic { background: #fff; border: 1px solid #e8dfc0; overflow: hidden; padding: 0; }
+.avatar.pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mini-avatar.pic { background: #fff; border: 1px solid #e8dfc0; overflow: hidden; }
+.mini-avatar.pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.horo-card select { width: 100%; padding: 8px 10px; border: 1px solid #d9c87a; border-radius: 8px; font-size: 14px; background: #fff; margin-top: 4px; }
+.horo-fortune { font-size: 13px; line-height: 1.65; margin-top: 8px; }
+.horo-fortune .stars { color: #f5a500; font-weight: 700; letter-spacing: 2px; }
+.horo-fortune .lucky { color: #55606a; font-size: 12.5px; }
   .talk-main { flex: 1; min-width: 0; }
   .talk-top { display: flex; justify-content: space-between; align-items: baseline; }
   .talk-name { font-weight: 700; font-size: 15px; }
@@ -101,19 +109,6 @@ mark.hit.current{background:#ff7b00;color:#fff;}
     <div class="tabs">
       <button class="tab active" id="tabMembers">議員で見る</button>
       <button class="tab" id="tabCats">テーマで見る</button>
-    </div>
-    <div class="kokuusa" id="kokuusaCard">
-      <div class="kokuusa-head">
-        <div class="kokuusa-face"><img src="kokuusa.png" alt="こくうさ"></div>
-        <div>
-          <div class="kokuusa-name">こくうさ</div>
-          <div class="kokuusa-msg" id="kokuusaMsg"></div>
-        </div>
-      </div>
-      <div class="kokuusa-horo">
-        <select id="horoSelect" aria-label="星座を選ぶ"></select>
-        <div class="kokuusa-fortune" id="horoFortune"></div>
-      </div>
     </div>
     <div class="talk-list" id="talkList"></div>
     <footer>
@@ -225,6 +220,18 @@ let currentTab = "members";
 function renderList(filter = "") {
   talkList.innerHTML = "";
   if (currentTab === "members") {
+    if (("こくうさ" + KOKUUSA.dateLabel + "質疑" + KOKUUSA.count + "星座占い").includes(filter)) {
+      const row = document.createElement("div");
+      row.className = "talk";
+      row.dataset.key = "kokuusa";
+      row.innerHTML =
+        '<div class="avatar pic"><img src="kokuusa-icon.png" alt="こくうさ"></div>' +
+        '<div class="talk-main"><div class="talk-top"><span class="talk-name">こくうさ</span>' +
+        '<span class="talk-date">7:00</span></div>' +
+        '<div class="talk-preview">' + KOKUUSA.dateLabel + "の質疑は" + KOKUUSA.count + "件｜今日の星座占いも配信中" + "</div></div>";
+      row.addEventListener("click", () => openKokuusa());
+      talkList.appendChild(row);
+    }
     MEMBERS
       .filter(m => (m.name + m.preview + m.cats.map(c => c.label).join("")).includes(filter))
       .forEach(m => {
@@ -478,11 +485,8 @@ document.getElementById("findPrev").addEventListener("click", () => {
 });
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
-/* こくうさ: today's questioning count (updated from the schedule sheet by the twice-daily checks) */
+/* こくうさ: questioning count (refreshed by the 7:00 daily delivery) + horoscope */
 const KOKUUSA = { dateLabel: "10月26日（月）", count: 1, detail: "森ようすけ（政治改革特別委員会 15:50〜）" };
-document.getElementById("kokuusaMsg").textContent =
-  "こんにちは、こくうさだよ。" + KOKUUSA.dateLabel + "の質疑は" + KOKUUSA.count + "件あるよ。" + KOKUUSA.detail + "。要約ができたらこのサイトに載るから、楽しみにしててね。";
-
 const SIGNS = ["牡羊座","牡牛座","双子座","蟹座","獅子座","乙女座","天秤座","蠍座","射手座","山羊座","水瓶座","魚座"];
 const FORTUNES = [
   "鋭い質問が冴える日。気になっていたことを聞いてみると、思わぬ答えが返ってきそう",
@@ -499,21 +503,44 @@ const FORTUNES = [
   "心が軽くなる日。深呼吸をして、好きなことに時間を使ってみて"
 ];
 const LUCKY = ["赤ペン","付箋","あたたかいお茶","議事録のしおり","マイボトル","ハンカチ","目薬","チョコレート","傘","メモ帳","イヤホン","湯たんぽ"];
-function horoscope() {
-  const sel = document.getElementById("horoSelect");
-  const i = Number(sel.value);
-  const now = new Date();
-  const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+function horoDay() {
+  const n = new Date();
+  if (n.getHours() < 7) n.setDate(n.getDate() - 1);
+  return n;
+}
+function fortuneHTML(i) {
+  const d = horoDay();
+  const seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
   const stars = 3 + ((seed + i * 7) % 3);
   const text = FORTUNES[(seed * 3 + i * 5) % FORTUNES.length];
   const item = LUCKY[(seed + i * 11) % LUCKY.length];
-  document.getElementById("horoFortune").innerHTML =
-    "<span class='stars'>" + "★".repeat(stars) + "</span> " + text +
+  return "<span class='stars'>" + "★".repeat(stars) + "</span> " + text +
     "<br><span class='lucky'>ラッキーアイテム：" + item + "</span>";
-  try { localStorage.setItem("kokuusa-sign", String(i)); } catch (e) {}
 }
-(function initHoro() {
-  const sel = document.getElementById("horoSelect");
+function openKokuusa() {
+  document.getElementById("threadName").textContent = "こくうさ";
+  document.getElementById("threadSub").textContent = "毎朝7時に配信";
+  const body = document.getElementById("threadBody");
+  body.innerHTML = "";
+  const chip = document.createElement("div");
+  chip.className = "date-chip";
+  chip.textContent = KOKUUSA.dateLabel + " 7:00配信";
+  body.appendChild(chip);
+  const row = document.createElement("div");
+  row.className = "row left";
+  row.innerHTML =
+    '<div class="mini-avatar pic"><img src="kokuusa-icon.png" alt="こくうさ"></div>' +
+    '<div class="bubble-wrap"><div class="speaker">こくうさ</div><div class="bubble">' +
+    "おはようございます、こくうさだよ。" + KOKUUSA.dateLabel + "の質疑は" + KOKUUSA.count + "件あるよ。" +
+    KOKUUSA.detail + "。要約ができたらこのサイトに載るから、楽しみにしててね。" +
+    "</div></div>";
+  body.appendChild(row);
+  const card = document.createElement("div");
+  card.className = "card horo-card";
+  card.innerHTML = '<b class="label">今日の星座占い</b><br><select id="horoSelect" aria-label="星座を選ぶ"></select><div class="horo-fortune" id="horoFortune"></div>';
+  body.appendChild(card);
+  const sel = card.querySelector("#horoSelect");
+  const out = card.querySelector("#horoFortune");
   SIGNS.forEach((name, i) => {
     const o = document.createElement("option");
     o.value = i; o.textContent = name + "の今日の運勢";
@@ -522,16 +549,22 @@ function horoscope() {
   let saved = 0;
   try { saved = Number(localStorage.getItem("kokuusa-sign") || 0); } catch (e) {}
   sel.value = String(Math.min(Math.max(saved, 0), 11));
-  sel.addEventListener("change", horoscope);
-  horoscope();
-})();
+  const draw = () => {
+    out.innerHTML = fortuneHTML(Number(sel.value));
+    try { localStorage.setItem("kokuusa-sign", sel.value); } catch (e) {}
+  };
+  sel.addEventListener("change", draw);
+  draw();
+  document.getElementById("findInput").value = ""; clearHits();
+  document.getElementById("threadPlaceholder").style.display = "none";
+  const bar = document.getElementById("findBar");
+  if (bar) bar.style.display = "";
+  if (!isDesktop()) listView.style.display = "none";
+  threadView.style.display = "flex";
+  window.scrollTo(0, 0);
+  markSelected("kokuusa");
+}
 
-/* こくうさ card shows only in the members tab */
-const _setTab = setTab;
-setTab = function(tab) {
-  _setTab(tab);
-  document.getElementById("kokuusaCard").style.display = tab === "members" ? "" : "none";
-};
 renderList();
 </script>
 </body>
