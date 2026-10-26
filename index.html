@@ -54,6 +54,11 @@
 .tab.active{background:#043e80;border-color:#043e80;color:#fff;font-weight:700;}
 .cat-meta{font-size:11px;color:#8a97a3;}
 .talk.selected{background:#e8f0f9;box-shadow:inset 3px 0 0 #043e80;}
+.full-back{align-self:flex-start;background:#fff;color:#043e80;border:1px solid #043e80;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;}
+.full-doc{background:#fff;border-radius:12px;padding:18px 16px;font-size:14px;line-height:1.9;color:#222;}
+.full-doc h2{font-size:16px;margin:1.6em 0 .6em;border-left:4px solid #f5b500;padding-left:9px;line-height:1.5;}
+.full-doc p{margin:.7em 0;}
+.full-doc a{color:#043e80;}
 .findbar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#eef2f6;border-bottom:1px solid #dbe3ea;}
 .findbar input{flex:1;padding:8px 11px;border:1px solid #c3cedb;border-radius:999px;font-size:14px;background:#fff;min-width:0;}
 .findbar button{flex:none;border:1px solid #c3cedb;background:#fff;border-radius:999px;padding:7px 11px;font-size:13px;cursor:pointer;color:#043e80;font-weight:700;}
@@ -291,6 +296,7 @@ function renderArticle(body, member, a) {
     const link = document.createElement("a");
     link.className = "full-link"; link.href = a.fullUrl;
     link.textContent = "全文文字起こしを読む";
+    link.addEventListener("click", ev => { ev.preventDefault(); openFull(member, a); });
     body.appendChild(link);
     const sub = document.createElement("a");
     sub.className = "full-link"; sub.href = a.noteUrl; sub.target = "_blank"; sub.rel = "noopener";
@@ -302,6 +308,42 @@ function renderArticle(body, member, a) {
     link.className = "full-link"; link.href = a.noteUrl; link.target = "_blank"; link.rel = "noopener";
     link.textContent = "全文文字起こしを読む（note）";
     body.appendChild(link);
+  }
+}
+
+async function openFull(member, a) {
+  const body = document.getElementById("threadBody");
+  try {
+    const res = await fetch(a.fullUrl);
+    if (!res.ok) throw new Error("fetch failed");
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const content = doc.querySelector("#articleBody");
+    if (!content) throw new Error("no article body");
+    body.innerHTML = "";
+    const back = document.createElement("button");
+    back.className = "full-back"; back.type = "button";
+    back.textContent = "← 要約に戻る";
+    back.addEventListener("click", () => openThread(member));
+    body.appendChild(back);
+    const head = document.createElement("div");
+    head.className = "card";
+    head.innerHTML = "<strong>" + a.title + "</strong><br>" + a.date + "｜" + member.name + "｜全文文字起こし";
+    body.appendChild(head);
+    const wrap = document.createElement("div");
+    wrap.className = "full-doc";
+    wrap.innerHTML = content.innerHTML;
+    body.appendChild(wrap);
+    document.getElementById("findInput").value = ""; clearHits();
+    document.getElementById("threadPlaceholder").style.display = "none";
+    const bar = document.getElementById("findBar");
+    if (bar) bar.style.display = "";
+    if (!isDesktop()) listView.style.display = "none";
+    threadView.style.display = "flex";
+    window.scrollTo(0, 0);
+    body.scrollTop = 0;
+  } catch (e) {
+    window.location.href = a.fullUrl;
   }
 }
 
