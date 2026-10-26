@@ -217,21 +217,40 @@ const listView = document.getElementById("listView");
 const threadView = document.getElementById("threadView");
 
 let currentTab = "cats";
+function addKokuusaRow(filter) {
+  if (!("こくうさ" + KOKUUSA.dateLabel + "質疑" + KOKUUSA.count + "星座占い").includes(filter)) return;
+  const row = document.createElement("div");
+  row.className = "talk";
+  row.dataset.key = "kokuusa";
+  row.innerHTML =
+    '<div class="avatar pic"><img src="kokuusa-icon.png" alt="こくうさ"></div>' +
+    '<div class="talk-main"><div class="talk-top"><span class="talk-name">こくうさ</span>' +
+    '<span class="talk-date">7:00</span></div>' +
+    '<div class="talk-preview">' + KOKUUSA.dateLabel + "の質疑は" + KOKUUSA.count + "件｜今日の星座占いも配信中" + "</div></div>";
+  row.addEventListener("click", () => openKokuusa());
+  talkList.appendChild(row);
+}
+function latestArticleTime(m) {
+  let best = null;
+  (m.articles || []).forEach(a => {
+    const mm = /([0-9]+)年([0-9]+)月([0-9]+)日/.exec(a.date || "");
+    if (mm) {
+      const t = Date.UTC(+mm[1], +mm[2] - 1, +mm[3]) - 9 * 3600 * 1000;
+      if (best === null || t > best) best = t;
+    }
+  });
+  return best;
+}
+function showBadge(m) {
+  if (!m.unread) return false;
+  const t = latestArticleTime(m);
+  if (t === null) return true;
+  return Date.now() < t + 33 * 3600 * 1000;
+}
 function renderList(filter = "") {
   talkList.innerHTML = "";
   if (currentTab === "members") {
-    if (("こくうさ" + KOKUUSA.dateLabel + "質疑" + KOKUUSA.count + "星座占い").includes(filter)) {
-      const row = document.createElement("div");
-      row.className = "talk";
-      row.dataset.key = "kokuusa";
-      row.innerHTML =
-        '<div class="avatar pic"><img src="kokuusa-icon.png" alt="こくうさ"></div>' +
-        '<div class="talk-main"><div class="talk-top"><span class="talk-name">こくうさ</span>' +
-        '<span class="talk-date">7:00</span></div>' +
-        '<div class="talk-preview">' + KOKUUSA.dateLabel + "の質疑は" + KOKUUSA.count + "件｜今日の星座占いも配信中" + "</div></div>";
-      row.addEventListener("click", () => openKokuusa());
-      talkList.appendChild(row);
-    }
+    addKokuusaRow(filter);
     MEMBERS
       .filter(m => (m.name + m.preview + m.cats.map(c => c.label).join("")).includes(filter))
       .forEach(m => {
@@ -239,15 +258,16 @@ function renderList(filter = "") {
         row.className = "talk";
         row.dataset.key = m.id;
         row.innerHTML =
-          '<div class="avatar' + (m.unread ? " new" : "") + '">' + m.initial + "</div>" +
+          '<div class="avatar' + (showBadge(m) ? " new" : "") + '">' + m.initial + "</div>" +
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + m.name + '</span>' +
           '<span class="talk-date">' + m.dateLabel + "</span></div>" +
           '<div class="talk-preview">' + m.preview + "</div></div>" +
-          (m.unread ? '<div class="badge">' + m.unread + "</div>" : "");
+          (showBadge(m) ? '<div class="badge">' + m.unread + "</div>" : "");
         row.addEventListener("click", () => openThread(m));
         talkList.appendChild(row);
       });
   } else {
+    addKokuusaRow(filter);
     const rooms = {};
     MEMBERS.forEach(m => m.cats.forEach(c => {
       (rooms[c.id] = rooms[c.id] || { cat: c, entries: [] }).entries.push({ member: m, entry: c });
