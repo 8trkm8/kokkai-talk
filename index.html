@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>国会質疑トーク（仮称）｜国民民主党の質疑が1分で読める</title>
+<link rel="icon" href="kokuusa.png">
 <meta name="description" content="国民民主党の国会質疑を、トーク画面のような形で1分で読める要約サイト（非公式）">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,7 +62,8 @@
 .full-doc a{color:#043e80;}
 .kokuusa{margin:10px 12px 2px;background:#fff8e1;border:1px solid #f5b500;border-radius:14px;padding:11px 12px;}
 .kokuusa-head{display:flex;gap:10px;align-items:flex-start;}
-.kokuusa-face{flex:none;width:46px;height:46px;border-radius:50%;background:#f5b500;display:flex;align-items:center;justify-content:center;font-size:25px;}
+.kokuusa-face{flex:none;width:58px;height:58px;border-radius:50%;background:#fff;border:1px solid #f0d98a;overflow:hidden;}
+.kokuusa-face img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
 .kokuusa-name{font-weight:700;font-size:13px;color:#043e80;}
 .kokuusa-msg{font-size:13px;line-height:1.6;margin-top:2px;}
 .kokuusa-horo{margin-top:10px;border-top:1px dashed #e3c766;padding-top:9px;}
@@ -102,7 +104,7 @@ mark.hit.current{background:#ff7b00;color:#fff;}
     </div>
     <div class="kokuusa" id="kokuusaCard">
       <div class="kokuusa-head">
-        <div class="kokuusa-face">🐰</div>
+        <div class="kokuusa-face"><img src="kokuusa.png" alt="こくうさ"></div>
         <div>
           <div class="kokuusa-name">こくうさ</div>
           <div class="kokuusa-msg" id="kokuusaMsg"></div>
