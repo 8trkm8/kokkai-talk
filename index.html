@@ -538,7 +538,7 @@ function renderList(filter = "") {
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + cat.label + '</span>' +
           '<span class="talk-date">' + first.member.dateLabel + "</span></div>" +
           '<div class="talk-preview">' + (first.entry.preview || first.member.preview) + "（" + first.member.name + "）</div>" +
-          '<div class="cat-meta">質疑 ' + entries.length + "件</div></div>" +
+          '<div class="cat-meta">質疑 ' + roomArticleCount(entries, cat.id) + "件</div></div>" +
           (newCount ? '<div class="badge">' + newCount + "</div>" : "");
         row.addEventListener("click", () => openCategory(cat.id));
         talkList.appendChild(row);
@@ -654,6 +654,14 @@ async function openFull(member, a) {
   }
 }
 
+
+function roomArticleCount(entries, catId) {
+  const seen = new Set();
+  entries.forEach(e => e.member.articles.forEach(a => {
+    if (!a.cats || a.cats.includes(catId)) seen.add(a.fullUrl || a.noteUrl || a.title);
+  }));
+  return seen.size;
+}
 function openCategory(catId) {
   const group = MEMBERS.filter(m => m.cats.some(c => c.id === catId));
   if (!group.length) return;
