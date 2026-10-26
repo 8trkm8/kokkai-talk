@@ -9,7 +9,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; background: #dfe5ea; color: #222; }
   .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #fff; display: flex; flex-direction: column; box-shadow: 0 0 24px rgba(0,0,0,.12); }
-  header { position: sticky; top: 0; z-index: 10; background: #243447; color: #fff; padding: 14px 16px 10px; }
+  header { position: sticky; top: 0; z-index: 10; background: #043e80; color: #fff; padding: 14px 16px 10px; }
   header h1 { font-size: 19px; letter-spacing: .02em; }
   header p { font-size: 11px; opacity: .75; margin-top: 3px; }
   .search { padding: 10px 12px; background: #f2f4f6; border-bottom: 1px solid #e2e7ec; }
@@ -18,7 +18,7 @@
   .talk { display: flex; gap: 11px; padding: 12px; border-bottom: 1px solid #edf0f3; cursor: pointer; align-items: flex-start; }
   .talk:active { background: #f2f7f5; }
   .avatar { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #5b7186; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; }
-  .avatar.new { background: #0e7c66; }
+  .avatar.new { background: #f5b500; color: #043e80; }
   .talk-main { flex: 1; min-width: 0; }
   .talk-top { display: flex; justify-content: space-between; align-items: baseline; }
   .talk-name { font-weight: 700; font-size: 15px; }
@@ -32,10 +32,10 @@
   .thread-body { flex: 1; background: #a9bfd4; padding: 14px 12px 20px; display: flex; flex-direction: column; gap: 10px; }
   .date-chip { align-self: center; background: rgba(0,0,0,.28); color: #fff; font-size: 11px; border-radius: 999px; padding: 3px 12px; }
   .committee-chip { align-self: center; background: rgba(255,255,255,.85); color: #44586c; font-size: 11px; border-radius: 999px; padding: 3px 12px; }
-  .card { background: #fffbe9; border: 1px solid #e8d98a; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.65; }
-  .card b.label { display: inline-block; background: #b8860b; color: #fff; font-size: 11px; border-radius: 6px; padding: 1px 7px; margin-bottom: 5px; }
+  .card { background: #fffbe9; border: 1px solid #f5b500; border-radius: 12px; padding: 10px 12px; font-size: 13px; line-height: 1.65; }
+  .card b.label { display: inline-block; background: #f5b500; color: #043e80; color: #fff; font-size: 11px; border-radius: 6px; padding: 1px 7px; margin-bottom: 5px; }
   .memo { background: #eef6f3; border: 1px solid #bcd9cf; }
-  .memo b.label { background: #0e7c66; }
+  .memo b.label { background: #043e80; color: #fff; }
   .row { display: flex; gap: 8px; align-items: flex-start; max-width: 88%; }
   .row.right { align-self: flex-end; flex-direction: row-reverse; }
   .row.left { align-self: flex-start; }
@@ -44,15 +44,21 @@
   .speaker { font-size: 11px; color: #33475c; margin: 0 2px 3px; }
   .row.right .speaker { text-align: right; }
   .bubble { font-size: 13.5px; line-height: 1.6; padding: 8px 11px; border-radius: 14px; background: #fff; }
-  .row.right .bubble { background: #0e7c66; color: #fff; }
-  .full-link { align-self: stretch; text-align: center; background: #243447; color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 11px; }
+  .row.right .bubble { background: #043e80; color: #fff; }
+  .full-link { align-self: stretch; text-align: center; background: #043e80; color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 11px; }
   .pending { background: #fff; border-radius: 12px; padding: 12px; font-size: 13px; line-height: 1.7; }
   .hidden { display: none; }
 
 .tabs{display:flex;gap:8px;padding:10px 14px 2px;}
 .tab{flex:1;padding:9px 0;border-radius:999px;border:1px solid #d7dee5;background:#fff;font-size:14px;color:#3c4a57;cursor:pointer;}
-.tab.active{background:#06c755;border-color:#06c755;color:#fff;font-weight:700;}
+.tab.active{background:#043e80;border-color:#043e80;color:#fff;font-weight:700;}
 .cat-meta{font-size:11px;color:#8a97a3;}
+.findbar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#eef2f6;border-bottom:1px solid #dbe3ea;}
+.findbar input{flex:1;padding:8px 11px;border:1px solid #c3cedb;border-radius:999px;font-size:14px;background:#fff;min-width:0;}
+.findbar button{flex:none;border:1px solid #c3cedb;background:#fff;border-radius:999px;padding:7px 11px;font-size:13px;cursor:pointer;color:#043e80;font-weight:700;}
+.findbar .count{flex:none;font-size:12px;color:#55606a;min-width:38px;text-align:center;}
+mark.hit{background:#f5b500;color:#222;border-radius:2px;padding:0 1px;}
+mark.hit.current{background:#ff7b00;color:#fff;}
 </style>
 </head>
 <body>
@@ -86,6 +92,12 @@
         </div>
       </div>
     </header>
+    <div class="findbar">
+      <input id="findInput" type="search" placeholder="この記事内を検索">
+      <span class="count" id="findCount"></span>
+      <button id="findPrev" type="button">↑</button>
+      <button id="findNext" type="button">↓</button>
+    </div>
     <div class="thread-body" id="threadBody"></div>
   </div>
 </div>
@@ -253,7 +265,7 @@ function renderArticle(body, member, a) {
   });
   const memo = document.createElement("div");
   memo.className = "card memo";
-  memo.innerHTML = '<b class="label">むぎのメモ</b><br>' + a.memo;
+  memo.innerHTML = '<b class="label">鶴亀のメモ</b><br>' + a.memo;
   body.appendChild(memo);
   if (a.fullUrl) {
     const link = document.createElement("a");
@@ -282,6 +294,7 @@ function openCategory(catId) {
   const body = document.getElementById("threadBody");
   body.innerHTML = "";
   group.forEach(m => m.articles.forEach(a => renderArticle(body, m, a)));
+  document.getElementById("findInput").value = ""; clearHits();
   listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
@@ -293,6 +306,7 @@ function openThread(member) {
   const body = document.getElementById("threadBody");
   body.innerHTML = "";
   member.articles.forEach(a => renderArticle(body, member, a));
+  document.getElementById("findInput").value = ""; clearHits();
   listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
@@ -305,6 +319,57 @@ document.getElementById("backBtn").addEventListener("click", () => {
 document.getElementById("searchBox").addEventListener("input", e => renderList(e.target.value.trim()));
 document.getElementById("tabMembers").addEventListener("click", () => setTab("members"));
 document.getElementById("tabCats").addEventListener("click", () => setTab("cats"));
+
+/* in-article find */
+let hitMarks = [], hitIdx = -1;
+function clearHits() {
+  document.querySelectorAll("#threadBody mark.hit").forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
+  document.getElementById("threadBody").normalize();
+  hitMarks = []; hitIdx = -1;
+  document.getElementById("findCount").textContent = "";
+}
+function runFind() {
+  clearHits();
+  const q = document.getElementById("findInput").value.trim();
+  if (!q) return;
+  const body = document.getElementById("threadBody");
+  const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => n.nodeValue.includes(q) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+  });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const frag = document.createDocumentFragment();
+    let rest = node.nodeValue;
+    while (true) {
+      const i = rest.indexOf(q);
+      if (i < 0) { frag.appendChild(document.createTextNode(rest)); break; }
+      if (i > 0) frag.appendChild(document.createTextNode(rest.slice(0, i)));
+      const mk = document.createElement("mark");
+      mk.className = "hit"; mk.textContent = q;
+      frag.appendChild(mk); hitMarks.push(mk);
+      rest = rest.slice(i + q.length);
+    }
+    node.replaceWith(frag);
+  });
+  if (hitMarks.length) { hitIdx = 0; showHit(); }
+  else document.getElementById("findCount").textContent = "0件";
+}
+function showHit() {
+  hitMarks.forEach((m, i) => m.classList.toggle("current", i === hitIdx));
+  document.getElementById("findCount").textContent = (hitIdx + 1) + "/" + hitMarks.length + "件";
+  hitMarks[hitIdx].scrollIntoView({ block: "center", behavior: "smooth" });
+}
+document.getElementById("findNext").addEventListener("click", () => {
+  if (!hitMarks.length) { runFind(); return; }
+  hitIdx = (hitIdx + 1) % hitMarks.length; showHit();
+});
+document.getElementById("findPrev").addEventListener("click", () => {
+  if (!hitMarks.length) { runFind(); return; }
+  hitIdx = (hitIdx - 1 + hitMarks.length) % hitMarks.length; showHit();
+});
+document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
+document.getElementById("findInput").addEventListener("search", runFind);
 renderList();
 </script>
 </body>
