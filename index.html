@@ -53,6 +53,7 @@
 .tab{flex:1;padding:9px 0;border-radius:999px;border:1px solid #d7dee5;background:#fff;font-size:14px;color:#3c4a57;cursor:pointer;}
 .tab.active{background:#043e80;border-color:#043e80;color:#fff;font-weight:700;}
 .cat-meta{font-size:11px;color:#8a97a3;}
+.talk.selected{background:#e8f0f9;box-shadow:inset 3px 0 0 #043e80;}
 .findbar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#eef2f6;border-bottom:1px solid #dbe3ea;}
 .findbar input{flex:1;padding:8px 11px;border:1px solid #c3cedb;border-radius:999px;font-size:14px;background:#fff;min-width:0;}
 .findbar button{flex:none;border:1px solid #c3cedb;background:#fff;border-radius:999px;padding:7px 11px;font-size:13px;cursor:pointer;color:#043e80;font-weight:700;}
@@ -102,7 +103,7 @@ mark.hit.current{background:#ff7b00;color:#fff;}
         </div>
       </div>
     </header>
-    <div class="findbar">
+    <div class="findbar" id="findBar">
       <input id="findInput" type="search" placeholder="この記事内を検索">
       <span class="count" id="findCount"></span>
       <button id="findPrev" type="button">↑</button>
@@ -199,6 +200,7 @@ function renderList(filter = "") {
       .forEach(m => {
         const row = document.createElement("div");
         row.className = "talk";
+        row.dataset.key = m.id;
         row.innerHTML =
           '<div class="avatar' + (m.unread ? " new" : "") + '">' + m.initial + "</div>" +
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + m.name + '</span>' +
@@ -219,6 +221,7 @@ function renderList(filter = "") {
         const first = entries[0];
         const row = document.createElement("div");
         row.className = "talk";
+        row.dataset.key = cat.id;
         row.innerHTML =
           '<div class="avatar">' + cat.icon + "</div>" +
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + cat.label + '</span>' +
@@ -232,6 +235,12 @@ function renderList(filter = "") {
   if (!talkList.children.length) {
     talkList.innerHTML = '<div style="padding:22px;text-align:center;color:#8a97a3;font-size:13px;">見つかりませんでした</div>';
   }
+}
+
+function markSelected(key) {
+  document.querySelectorAll(".talk").forEach(r => r.classList.toggle("selected", r.dataset.key === key));
+  const bar = document.getElementById("findBar");
+  if (bar) bar.style.display = "";
 }
 
 function setTab(tab) {
@@ -310,6 +319,7 @@ function openCategory(catId) {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
+  markSelected(catId);
 }
 
 function openThread(member) {
@@ -323,6 +333,7 @@ function openThread(member) {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
+  markSelected(member.id);
 }
 
 function isDesktop() { return window.matchMedia("(min-width: 900px)").matches; }
@@ -335,6 +346,9 @@ function syncLayout() {
   if (isDesktop()) {
     listView.style.display = "";
     threadView.style.display = "flex";
+    if (!document.getElementById("threadBody").children.length) {
+      document.getElementById("findBar").style.display = "none";
+    }
   } else {
     if (threadView.style.display === "flex" && document.getElementById("threadBody").children.length) {
       listView.style.display = "none";
