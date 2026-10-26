@@ -853,6 +853,21 @@ function showBadge(m) {
   if (t === null) return true;
   return Date.now() < t + 33 * 3600 * 1000;
 }
+function readState() { try { return JSON.parse(localStorage.getItem("kt-read") || "{}"); } catch (e) { return {}; } }
+function badgeKey(m) { return m.addedOn || (latestArticle(m) || {}).date || ""; }
+function unreadNow(m) {
+  if (!showBadge(m)) return 0;
+  const r = readState()[m.id];
+  if (r && r.key === badgeKey(m)) return Math.max(0, (m.unread || 0) - (r.unread || 0));
+  return m.unread || 0;
+}
+function markRead(m) {
+  try {
+    const st = readState();
+    st[m.id] = { key: badgeKey(m), unread: m.unread || 0 };
+    localStorage.setItem("kt-read", JSON.stringify(st));
+  } catch (e) {}
+}
 function renderList(filter = "") {
   talkList.innerHTML = "";
   if (currentTab === "members") {
@@ -865,11 +880,11 @@ function renderList(filter = "") {
         row.className = "talk";
         row.dataset.key = m.id;
         row.innerHTML =
-          '<div class="avatar' + (showBadge(m) ? " new" : "") + '">' + m.initial + "</div>" +
+          '<div class="avatar' + (unreadNow(m) ? " new" : "") + '">' + m.initial + "</div>" +
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + m.name + '</span>' +
           '<span class="talk-date">' + (articleDateLabel(latestArticle(m) || {}) || m.dateLabel) + "</span></div>" +
           '<div class="talk-preview">' + m.preview + "</div></div>" +
-          (showBadge(m) ? '<div class="badge">' + m.unread + "</div>" : "");
+          (unreadNow(m) ? '<div class="badge">' + unreadNow(m) + "</div>" : "");
         row.addEventListener("click", () => openThread(m));
         talkList.appendChild(row);
       });
@@ -894,7 +909,7 @@ function renderList(filter = "") {
       })
       .sort((x, y) => y.sortTime - x.sortTime)
       .forEach(({ cat, entries, first, dateText }) => {
-        const newCount = entries.filter(e => showBadge(e.member)).length;
+        const newCount = entries.filter(e => unreadNow(e.member) > 0).length;
         const row = document.createElement("div");
         row.className = "talk";
         row.dataset.key = cat.id;
@@ -1045,6 +1060,8 @@ function openCategory(catId) {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
+  group.forEach(markRead);
+  renderList(document.getElementById("searchBox").value.trim());
   markSelected(catId);
 }
 
@@ -1059,6 +1076,8 @@ function openThread(member) {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
+  markRead(member);
+  renderList(document.getElementById("searchBox").value.trim());
   markSelected(member.id);
 }
 
