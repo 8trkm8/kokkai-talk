@@ -843,15 +843,7 @@ function latestArticleTime(m) {
   return best;
 }
 function showBadge(m) {
-  if (!m.unread) return false;
-  let t = null;
-  if (m.addedOn) {
-    const mm = /([0-9]+)-([0-9]+)-([0-9]+)/.exec(m.addedOn);
-    if (mm) t = Date.UTC(+mm[1], +mm[2] - 1, +mm[3]) - 9 * 3600 * 1000;
-  }
-  if (t === null) t = latestArticleTime(m);
-  if (t === null) return true;
-  return Date.now() < t + 33 * 3600 * 1000;
+  return !!m.unread;
 }
 function readState() { try { return JSON.parse(localStorage.getItem("kt-read") || "{}"); } catch (e) { return {}; } }
 function badgeKey(m) { return m.addedOn || (latestArticle(m) || {}).date || ""; }
