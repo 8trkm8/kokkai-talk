@@ -818,6 +818,19 @@ function addKokuusaRow(filter) {
   row.addEventListener("click", () => openKokuusa());
   talkList.appendChild(row);
 }
+function articleTime(a) {
+  const mm = /([0-9]+)年([0-9]+)月([0-9]+)日/.exec(a.date || "");
+  return mm ? Date.UTC(+mm[1], +mm[2] - 1, +mm[3]) - 9 * 3600 * 1000 : null;
+}
+function articleDateLabel(a) {
+  const mm = /([0-9]+)月([0-9]+)日/.exec(a.date || "");
+  return mm ? (+mm[1]) + "/" + (+mm[2]) : null;
+}
+function latestArticle(m) {
+  let best = null, bestT = -1;
+  (m.articles || []).forEach(a => { const t = articleTime(a); if (t !== null && t > bestT) { bestT = t; best = a; } });
+  return best;
+}
 function latestArticleTime(m) {
   let best = null;
   (m.articles || []).forEach(a => {
@@ -846,6 +859,7 @@ function renderList(filter = "") {
     addKokuusaRow(filter);
     MEMBERS
       .filter(m => (m.name + m.preview + m.cats.map(c => c.label).join("")).includes(filter))
+      .sort((x, y) => (latestArticleTime(y) || 0) - (latestArticleTime(x) || 0))
       .forEach(m => {
         const row = document.createElement("div");
         row.className = "talk";
@@ -853,7 +867,7 @@ function renderList(filter = "") {
         row.innerHTML =
           '<div class="avatar' + (showBadge(m) ? " new" : "") + '">' + m.initial + "</div>" +
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + m.name + '</span>' +
-          '<span class="talk-date">' + m.dateLabel + "</span></div>" +
+          '<span class="talk-date">' + (articleDateLabel(latestArticle(m) || {}) || m.dateLabel) + "</span></div>" +
           '<div class="talk-preview">' + m.preview + "</div></div>" +
           (showBadge(m) ? '<div class="badge">' + m.unread + "</div>" : "");
         row.addEventListener("click", () => openThread(m));
@@ -867,8 +881,19 @@ function renderList(filter = "") {
     }));
     Object.values(rooms)
       .filter(({ cat, entries }) => (cat.label + entries.map(e => e.member.name + (e.entry.preview || e.member.preview)).join("")).includes(filter))
-      .forEach(({ cat, entries }) => {
-        const first = entries[0];
+      .map(({ cat, entries }) => {
+        let first = entries[0], dateText = entries[0].member.dateLabel, sortTime = -1;
+        entries.forEach(e => {
+          e.member.articles.forEach(a => {
+            if (a.cats && !a.cats.includes(cat.id)) return;
+            const t = articleTime(a);
+            if (t !== null && t > sortTime) { sortTime = t; first = e; dateText = articleDateLabel(a) || dateText; }
+          });
+        });
+        return { cat, entries, first, dateText, sortTime };
+      })
+      .sort((x, y) => y.sortTime - x.sortTime)
+      .forEach(({ cat, entries, first, dateText }) => {
         const newCount = entries.filter(e => showBadge(e.member)).length;
         const row = document.createElement("div");
         row.className = "talk";
@@ -876,7 +901,7 @@ function renderList(filter = "") {
         row.innerHTML =
           '<div class="avatar">' + cat.icon + "</div>" +
           '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + cat.label + '</span>' +
-          '<span class="talk-date">' + first.member.dateLabel + "</span></div>" +
+          '<span class="talk-date">' + dateText + "</span></div>" +
           '<div class="talk-preview">' + (first.entry.preview || first.member.preview) + "（" + first.member.name + "）</div>" +
           '<div class="cat-meta">質疑 ' + roomArticleCount(entries, cat.id) + "件</div></div>" +
           (newCount ? '<div class="badge">' + newCount + "</div>" : "");
