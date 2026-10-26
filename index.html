@@ -48,6 +48,11 @@
   .full-link { align-self: stretch; text-align: center; background: #243447; color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 11px; }
   .pending { background: #fff; border-radius: 12px; padding: 12px; font-size: 13px; line-height: 1.7; }
   .hidden { display: none; }
+
+.tabs{display:flex;gap:8px;padding:10px 14px 2px;}
+.tab{flex:1;padding:9px 0;border-radius:999px;border:1px solid #d7dee5;background:#fff;font-size:14px;color:#3c4a57;cursor:pointer;}
+.tab.active{background:#06c755;border-color:#06c755;color:#fff;font-weight:700;}
+.cat-meta{font-size:11px;color:#8a97a3;}
 </style>
 </head>
 <body>
@@ -59,6 +64,10 @@
       <p>国民民主党の質疑が1分で読める（非公式）</p>
     </header>
     <div class="search"><input id="searchBox" type="search" placeholder="議員名やキーワードで検索"></div>
+    <div class="tabs">
+      <button class="tab active" id="tabMembers">議員で見る</button>
+      <button class="tab" id="tabCats">テーマで見る</button>
+    </div>
     <div class="talk-list" id="talkList"></div>
     <footer>
       このサイトは、国民民主党の文字起こしを行う個人による<strong>非公式</strong>の要約サイトです。党の公式サイトではありません。<br>
@@ -84,7 +93,7 @@
 <script>
 const MEMBERS = [
   {
-    id: "furukawa", name: "古川元久", initial: "古", dateLabel: "10/23", unread: 1,
+    id: "furukawa", cats: [{ id: "money", label: "税とお金", icon: "💰" }], name: "古川元久", initial: "古", dateLabel: "10/23", unread: 1,
     preview: "「いくらもらえるか」が決まらない法案。金額はこの日も示されず",
     articles: [{
       date: "2026年10月23日", committee: "衆議院・財務金融委員会",
@@ -106,28 +115,48 @@ const MEMBERS = [
       memo: "結局、金額も国民会議再開の確約も示されず。次は予算編成過程と、法案審議の続きが焦点。"
     }]
   },
-  { id: "tanaka", name: "田中けん", initial: "田", dateLabel: "10/23", unread: 0,
+  { id: "tanaka", cats: [{ id: "money", label: "税とお金", icon: "💰" }], name: "田中けん", initial: "田", dateLabel: "10/23", unread: 0,
     preview: "支援金、決めたのは国なのに確認から振込まで市町村任せ",
     articles: [{ date: "2026年10月23日", title: "支援金、決めたのは国なのに、所得の確認から振込まで市町村任せ", pending: true }] },
-  { id: "okano", name: "岡野純子", initial: "岡", dateLabel: "10/23", unread: 0,
+  { id: "okano", cats: [{ id: "health", label: "医療・福祉", icon: "🏥" }, { id: "children", label: "子ども・家族", icon: "👶", preview: "発達障害の早期受診が、将来の保険加入の落とし穴になる矛盾" }], name: "岡野純子", initial: "岡", dateLabel: "10/23", unread: 0,
     preview: "日本の薬は外国頼み？ 海外トラブルで「薬難民」が生まれる訳",
     articles: [{ date: "2026年10月23日", title: "日本の薬、実は外国頼み？ 海外のトラブル1つで「薬難民」が生まれる訳", pending: true }] },
-  { id: "hino", name: "日野さりあ", initial: "日", dateLabel: "10/23", unread: 0,
-    preview: "発達障害の早期受診が“将来の落とし穴”になる矛盾",
-    articles: [{ date: "2026年10月23日", title: "発達障害の早期受診が“将来の落とし穴”になる矛盾。親の叫びに対する大臣の答弁は", pending: true }] },
-  { id: "ido", name: "井戸まさえ", initial: "井", dateLabel: "10/23", unread: 0,
+  { id: "hino", cats: [{ id: "health", label: "医療・福祉", icon: "🏥", preview: "傷病手当金は5年で約1.6倍に増加。発達障害と障害年金の取扱いは「一律同一疾病ではない」と政府が説明" }, { id: "children", label: "子ども・家族", icon: "👶", preview: "子どもの発達障害の受診が、将来の障害年金の落とし穴に？ 親の不安に大臣は「受診を控える事態は望ましくない」" }], name: "日野さりあ", initial: "日", dateLabel: "10/23", unread: 0,
+    preview: "子どもの発達障害受診が将来の年金の落とし穴に？ 政府は「一律同一疾病ではない」、具体策は示されず",
+    articles: [{
+      date: "2026年10月23日", committee: "衆議院・厚生労働委員会",
+      title: "発達障害の早期受診が“将来の落とし穴”になる矛盾。親の叫びに対する大臣の答弁は",
+      summary: "論点は大きく3つ。発達障害と障害年金の取扱い／傷病手当金の急増／社会保障の財源。政府は「一律同一疾病ではない」と公式に説明したが、見直しや救済の具体策は示されなかった。",
+      noteUrl: "https://note.com/tamakitext/n/n4c8b5b6d1e3d",
+      bubbles: [
+        { side: "left",  speaker: "日野さりあ", text: "消費税は社会保障を支える重要な財源です。減税の穴埋めで医療や介護、子育て支援が削られないよう、「社会保障の財源に手を付けない」と総理に申し入れていただけますか。" },
+        { side: "right", speaker: "上野厚生労働大臣", text: "財源は租税特別措置や補助金の見直しなど、歳出歳入全般の見直しで確保されるものと承知しています。社会保障財源に穴が開くことにはならない、という認識です。" },
+        { side: "left",  speaker: "日野さりあ", text: "傷病手当金の支給額は2018年度の約3,800億円から2023年度には約6,100億円へ、5年で約1.6倍に増えました。精神疾患の総患者数は微減しているのに、なぜですか。（※金額・倍率は日野議員が質問で提示した数字）" },
+        { side: "right", speaker: "宮崎保険局長", text: "要因は労働環境や受診行動の変化、高齢化、賃上げなど複合的で、一概にはお答えできません。協会けんぽでは精神・行動の障害が支給額の41％を占め、この間の伸びは約2.0倍です。" },
+        { side: "left",  speaker: "日野さりあ", text: "「誰でも傷病手当金を受給できる」と誤認させる申請支援ビジネスについて、保険者や医師、経営者から具体的な事例が私たちに寄せられています。厚労省に寄せられた声に、どう対応してきましたか。" },
+        { side: "right", speaker: "上野厚生労働大臣", text: "業者の存在は承知していますが、個別の詳細な事例の報告は届いていない状況です。保険者へのヒアリングで実態把握を進め、必要に応じて対応を検討します。" },
+        { side: "left",  speaker: "日野さりあ", text: "福祉避難所の情報が自治体のホームページの避難所一覧に載っていないという声があります。ガイドラインに沿った指定福祉避難所は全ての市町村に準備されているのですか。妊婦への周知はどうしていますか。" },
+        { side: "right", speaker: "西田内閣副大臣", text: "令和7年10月現在、福祉避難所は全国26,784か所、1,740市町村のうち1,671市町村に設置されています。好事例を年2回の全国会議で横展開し、周知に努めます。" },
+        { side: "left",  speaker: "日野さりあ", text: "子どもの頃の発達障害の受診が初診日になると、将来うつ病を発症しても障害厚生年金の対象外になることがあると聞きます。なぜ発達障害とうつ病を同一疾病として扱うのですか。医学的根拠でしょうか。" },
+        { side: "right", speaker: "伊澤大臣官房年金管理審議官", text: "疑義照会は、発達障害とうつ病を一律に同一疾病として取り扱うと示したものではありません。発症が発達障害に起因するかは、経過や症状、就労状況などから個々の事案ごとに医学的に総合判断しています。" },
+        { side: "left",  speaker: "日野さりあ", text: "その取扱いのせいで、必要な早期受診をためらう保護者が出ています。初診日や同一疾病の取扱いを見直すのか、別の救済措置を検討するのか、受診をためらわずに済む具体的な対応策を示してください。" },
+        { side: "right", speaker: "上野厚生労働大臣", text: "早期受診を控える事態は望ましくありません。早期支援の重要性の周知に取り組み、疑義照会についても誤解が生じないよう、どういった対応ができるか考えていきたいと思います。" }
+      ],
+      memo: "この日決まったことはほぼなし。「一律同一疾病ではない」と政府が公式に説明したのが最大の収穫だが、見直しや救済の具体策、総理への申し入れ、介護の基本報酬引上げ率はすべて示されなかった。次は疑義照会への対応方針と、令和9年度介護報酬改定の審議会論議を追う。"
+    }] },
+  { id: "ido", cats: [{ id: "children", label: "子ども・家族", icon: "👶" }], name: "井戸まさえ", initial: "井", dateLabel: "10/23", unread: 0,
     preview: "紙のルールに縛られる子どもたち。韓国の「保護出産」から考える日本の壁",
     articles: [{ date: "2026年10月23日", title: "紙のルールに縛られ取り残される子どもたちへ。韓国の「保護出産」事例から考える日本の壁", pending: true }] },
-  { id: "asano", name: "浅野さとし", initial: "浅", dateLabel: "10/23", unread: 0,
+  { id: "asano", cats: [{ id: "work", label: "働き方", icon: "💼" }], name: "浅野さとし", initial: "浅", dateLabel: "10/23", unread: 0,
     preview: "裁量労働制の拡大に待った。「本当の成果」で評価すべき",
     articles: [{ date: "2026年10月23日", title: "裁量労働制の拡大議論に待った。労働時間の帳尻合わせではなく「本当の成果」で評価すべき", pending: true }] },
-  { id: "usuki", name: "臼木ひでたけ", initial: "臼", dateLabel: "10/23", unread: 0,
+  { id: "usuki", cats: [{ id: "infra", label: "交通・インフラ", icon: "🚃" }], name: "臼木ひでたけ", initial: "臼", dateLabel: "10/23", unread: 0,
     preview: "北海道の赤字路線から船員教育まで、暮らしのライフラインを問い直す",
     articles: [{ date: "2026年10月23日", title: "北海道の赤字路線から船員教育まで、暮らしのライフラインを問い直す", pending: true }] },
-  { id: "iizumi", name: "飯泉嘉門", initial: "飯", dateLabel: "10/23", unread: 0,
+  { id: "iizumi", cats: [{ id: "justice", label: "法務・人権", icon: "⚖️" }], name: "飯泉嘉門", initial: "飯", dateLabel: "10/23", unread: 0,
     preview: "再犯した人の7割が無職という現実。仕事がなければ人はやり直せないのか",
     articles: [{ date: "2026年10月23日", title: "再犯した人の7割が無職という現実。仕事がなければ人はやり直せないのか", pending: true }] },
-  { id: "hashimoto", name: "橋本みきひこ", initial: "橋", dateLabel: "10/23", unread: 0,
+  { id: "hashimoto", cats: [{ id: "defense", label: "防衛", icon: "🛡️" }], name: "橋本みきひこ", initial: "橋", dateLabel: "10/23", unread: 0,
     preview: "部品を取り合って飛ぶ戦闘機。元自衛官が暴く防衛現場のリアル",
     articles: [{ date: "2026年10月23日", title: "部品を取り合って飛ぶ戦闘機—元自衛官が暴く防衛現場のリアル", pending: true }] }
 ];
@@ -137,74 +166,120 @@ const talkList = document.getElementById("talkList");
 const listView = document.getElementById("listView");
 const threadView = document.getElementById("threadView");
 
+let currentTab = "members";
 function renderList(filter = "") {
   talkList.innerHTML = "";
-  MEMBERS
-    .filter(m => (m.name + m.preview).includes(filter))
-    .forEach(m => {
-      const row = document.createElement("div");
-      row.className = "talk";
-      row.innerHTML =
-        '<div class="avatar' + (m.unread ? " new" : "") + '">' + m.initial + "</div>" +
-        '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + m.name + '</span>' +
-        '<span class="talk-date">' + m.dateLabel + "</span></div>" +
-        '<div class="talk-preview">' + m.preview + "</div></div>" +
-        (m.unread ? '<div class="badge">' + m.unread + "</div>" : "");
-      row.addEventListener("click", () => openThread(m));
-      talkList.appendChild(row);
-    });
+  if (currentTab === "members") {
+    MEMBERS
+      .filter(m => (m.name + m.preview + m.cats.map(c => c.label).join("")).includes(filter))
+      .forEach(m => {
+        const row = document.createElement("div");
+        row.className = "talk";
+        row.innerHTML =
+          '<div class="avatar' + (m.unread ? " new" : "") + '">' + m.initial + "</div>" +
+          '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + m.name + '</span>' +
+          '<span class="talk-date">' + m.dateLabel + "</span></div>" +
+          '<div class="talk-preview">' + m.preview + "</div></div>" +
+          (m.unread ? '<div class="badge">' + m.unread + "</div>" : "");
+        row.addEventListener("click", () => openThread(m));
+        talkList.appendChild(row);
+      });
+  } else {
+    const rooms = {};
+    MEMBERS.forEach(m => m.cats.forEach(c => {
+      (rooms[c.id] = rooms[c.id] || { cat: c, entries: [] }).entries.push({ member: m, entry: c });
+    }));
+    Object.values(rooms)
+      .filter(({ cat, entries }) => (cat.label + entries.map(e => e.member.name + (e.entry.preview || e.member.preview)).join("")).includes(filter))
+      .forEach(({ cat, entries }) => {
+        const first = entries[0];
+        const row = document.createElement("div");
+        row.className = "talk";
+        row.innerHTML =
+          '<div class="avatar">' + cat.icon + "</div>" +
+          '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + cat.label + '</span>' +
+          '<span class="talk-date">' + first.member.dateLabel + "</span></div>" +
+          '<div class="talk-preview">' + (first.entry.preview || first.member.preview) + "（" + first.member.name + "）</div>" +
+          '<div class="cat-meta">質疑 ' + entries.length + "件</div></div>";
+        row.addEventListener("click", () => openCategory(cat.id));
+        talkList.appendChild(row);
+      });
+  }
   if (!talkList.children.length) {
     talkList.innerHTML = '<div style="padding:22px;text-align:center;color:#8a97a3;font-size:13px;">見つかりませんでした</div>';
   }
 }
 
-function openThread(member) {
-  document.getElementById("threadName").textContent = member.name;
+function setTab(tab) {
+  currentTab = tab;
+  document.getElementById("tabMembers").classList.toggle("active", tab === "members");
+  document.getElementById("tabCats").classList.toggle("active", tab === "cats");
+  renderList(document.getElementById("searchBox").value.trim());
+}
+
+function renderArticle(body, member, a) {
+  const date = document.createElement("div");
+  date.className = "date-chip"; date.textContent = a.date + "｜" + member.name;
+  body.appendChild(date);
+  if (a.committee) {
+    const c = document.createElement("div");
+    c.className = "committee-chip"; c.textContent = a.committee;
+    body.appendChild(c);
+  }
+  if (a.pending) {
+    const p = document.createElement("div");
+    p.className = "pending";
+    p.innerHTML = "<strong>" + a.title + "</strong><br>この記事の吹き出し要約は準備中です。全文はnoteで読めます。";
+    body.appendChild(p);
+    const link = document.createElement("a");
+    link.className = "full-link"; link.href = NOTE_TOP; link.target = "_blank"; link.rel = "noopener";
+    link.textContent = "noteで全文を読む";
+    body.appendChild(link);
+    return;
+  }
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = '<b class="label">1分要約</b><br><strong>' + a.title + "</strong><br>" + a.summary;
+  body.appendChild(card);
+  a.bubbles.forEach(b => {
+    const row = document.createElement("div");
+    row.className = "row " + b.side;
+    const isRight = b.side === "right";
+    row.innerHTML =
+      (isRight ? "" : '<div class="mini-avatar">' + member.initial + "</div>") +
+      '<div class="bubble-wrap"><div class="speaker">' + b.speaker + '</div><div class="bubble">' + b.text + "</div></div>";
+    body.appendChild(row);
+  });
+  const memo = document.createElement("div");
+  memo.className = "card memo";
+  memo.innerHTML = '<b class="label">むぎのメモ</b><br>' + a.memo;
+  body.appendChild(memo);
+  const link = document.createElement("a");
+  link.className = "full-link"; link.href = a.noteUrl; link.target = "_blank"; link.rel = "noopener";
+  link.textContent = "全文文字起こしを読む（note）";
+  body.appendChild(link);
+}
+
+function openCategory(catId) {
+  const group = MEMBERS.filter(m => m.cats.some(c => c.id === catId));
+  if (!group.length) return;
+  const cat = group[0].cats.find(c => c.id === catId);
+  document.getElementById("threadName").textContent = cat.icon + " " + cat.label;
+  document.getElementById("threadSub").textContent = "テーマ別の質疑";
   const body = document.getElementById("threadBody");
   body.innerHTML = "";
-  member.articles.forEach(a => {
-    document.getElementById("threadSub").textContent = a.committee || "国会質疑";
-    const date = document.createElement("div");
-    date.className = "date-chip"; date.textContent = a.date;
-    body.appendChild(date);
-    if (a.committee) {
-      const c = document.createElement("div");
-      c.className = "committee-chip"; c.textContent = a.committee;
-      body.appendChild(c);
-    }
-    if (a.pending) {
-      const p = document.createElement("div");
-      p.className = "pending";
-      p.innerHTML = "<strong>" + a.title + "</strong><br>この記事の吹き出し要約は準備中です。全文はnoteで読めます。";
-      body.appendChild(p);
-      const link = document.createElement("a");
-      link.className = "full-link"; link.href = NOTE_TOP; link.target = "_blank"; link.rel = "noopener";
-      link.textContent = "noteで全文を読む";
-      body.appendChild(link);
-      return;
-    }
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = '<b class="label">1分要約</b><br><strong>' + a.title + "</strong><br>" + a.summary;
-    body.appendChild(card);
-    a.bubbles.forEach(b => {
-      const row = document.createElement("div");
-      row.className = "row " + b.side;
-      const isRight = b.side === "right";
-      row.innerHTML =
-        (isRight ? "" : '<div class="mini-avatar">' + member.initial + "</div>") +
-        '<div class="bubble-wrap"><div class="speaker">' + b.speaker + '</div><div class="bubble">' + b.text + "</div></div>";
-      body.appendChild(row);
-    });
-    const memo = document.createElement("div");
-    memo.className = "card memo";
-    memo.innerHTML = '<b class="label">むぎのメモ</b><br>' + a.memo;
-    body.appendChild(memo);
-    const link = document.createElement("a");
-    link.className = "full-link"; link.href = a.noteUrl; link.target = "_blank"; link.rel = "noopener";
-    link.textContent = "全文文字起こしを読む（note）";
-    body.appendChild(link);
-  });
+  group.forEach(m => m.articles.forEach(a => renderArticle(body, m, a)));
+  listView.style.display = "none";
+  threadView.style.display = "flex";
+  window.scrollTo(0, 0);
+}
+
+function openThread(member) {
+  document.getElementById("threadName").textContent = member.name;
+  document.getElementById("threadSub").textContent = member.articles[0].committee || "国会質疑";
+  const body = document.getElementById("threadBody");
+  body.innerHTML = "";
+  member.articles.forEach(a => renderArticle(body, member, a));
   listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
@@ -215,6 +290,8 @@ document.getElementById("backBtn").addEventListener("click", () => {
   listView.style.display = "";
 });
 document.getElementById("searchBox").addEventListener("input", e => renderList(e.target.value.trim()));
+document.getElementById("tabMembers").addEventListener("click", () => setTab("members"));
+document.getElementById("tabCats").addEventListener("click", () => setTab("cats"));
 renderList();
 </script>
 </body>
