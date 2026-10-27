@@ -1252,7 +1252,7 @@ const threadView = document.getElementById("threadView");
 
 let currentTab = "cats";
 function addKokuusaRow(filter) {
-  if (!("こくうさ" + KOKUUSA.dateLabel + "質疑" + KOKUUSA.count + "星座占い").includes(filter)) return;
+  if (!("こくうさ" + KOKUUSA.dateLabel + "質疑" + KOKUUSA.count + "こくうさ雑学").includes(filter)) return;
   const row = document.createElement("div");
   row.className = "talk";
   row.dataset.key = "kokuusa";
@@ -1260,7 +1260,7 @@ function addKokuusaRow(filter) {
     '<div class="avatar pic"><img src="kokuusa-icon.png" alt="こくうさ"></div>' +
     '<div class="talk-main"><div class="talk-top"><span class="talk-name">こくうさ</span>' +
     '<span class="talk-date">7:00</span></div>' +
-    '<div class="talk-preview">' + KOKUUSA.dateLabel + "の質疑は" + KOKUUSA.count + "件｜今日の星座占いも配信中" + "</div></div>";
+    '<div class="talk-preview">' + KOKUUSA.dateLabel + "の質疑は" + KOKUUSA.count + "件｜こくうさ雑学も配信中" + "</div></div>";
   row.addEventListener("click", () => openKokuusa());
   talkList.appendChild(row);
 }
@@ -1594,52 +1594,8 @@ document.getElementById("findPrev").addEventListener("click", () => {
 });
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
-/* こくうさ: questioning count (refreshed by the 7:00 daily delivery) + horoscope */
-const KOKUUSA = { dateLabel: "10月27日（火）", count: 19, detail: "橋本みきひこ（安全保障委員会 09:37〜）、近藤雅彦（財務金融委員会 10:38〜）、高沢かずもと（総務委員会 10:40〜）、向山好一（環境委員会 10:50〜）、このみ亮太郎（総務委員会 10:55〜）、鍋島せり（環境委員会 11:10〜）、村岡としひで（農林水産委員会 11:15〜）、臼木ひでたけ（農林水産委員会 11:35〜）、田中けん（財務金融委員会 15:40〜）、小林さやか（法務委員会 11:15〜）、平戸航太（経済産業委員会 11:20〜）、牛田まゆ（内閣委員会 11:30〜）、伊藤たかえ（文教科学委員会 13:00〜）、伊藤たつお（文教科学委員会 13:20〜）、浜口誠（厚生労働委員会 13:30〜）、竹詰ひとし（財政金融委員会 14:00〜）、はが道也（厚生労働委員会 14:00〜）、原田ひでかず（財政金融委員会 14:22〜）、山田吉彦（外交防衛委員会 14:23〜）" };
-const SIGNS = ["牡羊座","牡牛座","双子座","蟹座","獅子座","乙女座","天秤座","蠍座","射手座","山羊座","水瓶座","魚座"];
-const FORTUNES = [
-  "今日のあなたは無敵の主人公補正が発動中。過去に覚えたくだらない雑学や、段差でつまずいた小さなミスさえ、すべて午後の大逆転劇を彩る華麗な伏線に変わるよ。堂々と転んで、涼しい顔で奇跡を起こしてね。",
-  "本日の脳内シナプスは暴走中。ふと浮かんだくだらないアイデアが、なぜか周囲をうならせる神の一手になりそう！適当に相槌を打つだけで「深謀遠慮な人」に見えるボーナスタイムなので、堂々と閃きを待つのが吉。",
-  "今日のあなたは歩くパワースポット。うっかり落としたペンを拾ってくれた人と謎の連帯感が生まれたり、信号が全部青だったりするよ。世界があなたのご機嫌取りに全力を注いでいるので、遠慮なく甘やかされよう。",
-  "勘違いが奇跡を呼ぶ日。「これ絶対いける」という根拠ゼロの自信が、現実を力ずくでねじ伏せて正解に変えてしまうよ。迷ったら一番派手で楽しそうな道を選んで大正解。運命も背中を押したくてウズウズしてるよ。",
-  "今日は言い間違いが名言に化ける日。うっかり口を滑らせた本音が、なぜか場の空気を一瞬で温めてしまうよ。取り繕うのは損。思ったことをそのまま言うのが、今日の最強のコミュニケーション術になるよ。",
-  "あなたの「まあいっか」が世界を救う日。細かいことを気にしすぎる人々の横で、その大らかさが場の潤滑油になるよ。締め切りは敵じゃない、ただの提案。今日は肩の力を抜いた人から勝っていきます。",
-  "今日は後回しにしていたアレが、意外なほどあっさり片付く日。手をつけた瞬間「なんだ、こんなもんか」ってなるやつ。長年の宿題は実は3分で終わる紙一重だったと知って、ちょっと笑えるよ。",
-  "偶然の出会いにツキがある日。いつもの席が埋まっていて座った隣の席こそ、今日の当たり席。コンビニの店員さんの何気ない一言が、午後のヒントになったりするよ。世界の端っこまでアンテナ全開でいてね。",
-  "今日のあなたには翻訳機が搭載されてるよ。難しい話を「つまりこういうこと」と一言で言い換える才能が開花する日。会議でも会話でも、あなたの要約が場を救うよ。その力、国会の質疑でも貸してほしいくらい。",
-  "買い物運が異様に強い日。ずっと欲しかったアレが、なぜか今日だけお得になってる予感。ただし「安いから買う」ではなく「欲しいから安く買える」のが本線。財布のひもは、賢く緩めるのが吉だよ。",
-  "寝坊すら伏線になる日。遅れたおかげで避けられた面倒、乗り遅れたおかげで出会えた景色。今日は「間に合わなかった」が「間に合った」に化ける魔法がかかってるよ。焦る必要、一切なし。",
-  "あなたの笑顔にバグ級の伝染力がある日。笑うと周りもつられて笑う、平和な連鎖の震源地になれるよ。難しい顔の人ほど、あなたの「おはよう」でほぐれる。世界平和、意外とそこから始まるのかも。"
-];
-const LUCKY = [
-  "賞味期限が今日までの好物（※「早く食べなければならない」という絶対的正義のもと、カロリーの罪悪感がすべて無効化されるよ）",
-  "付箋とペン（※適当な英単語を殴り書きして貼っておくだけで、「極秘プロジェクトを抱える天才」の風格が出ます）",
-  "いつもより高めのアイス（※「頑張った自分へのご褒美」という名目を使えば、昼下がりのカロリーは無害化されます）",
-  "お気に入りの靴（※履いて歩くだけで、どんな道でも勝手にレッドカーペットに書き換える仕様になってるよ）",
-  "赤いペン（※持っているだけで「できる人の小物」認定。丸を付ける相手がいなくても、自分に花丸をあげてよし）",
-  "温かいお茶（※一口飲むたびに「まあいっか」の効力が10分延長される仕様です）",
-  "タイマー（※「とりあえず3分だけ」と唱えると発動する魔法の道具。本当に3分で終わらなくても責任は取りません）",
-  "ハンカチ（※誰かのピンチに差し出せば好感度が爆上がり。使う機会がなくても、持っているだけで紳士淑女ポイント+10）",
-  "メモ帳（※書いた瞬間に頭の中のモヤモヤが勝手に整列する、令和の魔法陣。字が汚くても効果は不変です）",
-  "エコバッグ（※レジ袋代3円を節約するたび、脳内で小さなファンファーレが鳴る仕様。地味に誇らしい）",
-  "目覚まし時計（※明日の自分への置き手紙だと思えば、セットする手にも愛着が湧く……はず。たぶん）",
-  "鏡（※見るたびに「今日の主役、いい顔してる」と脳内ナレーションが入るオプション付き。もちろん無料です）"
-];
-function horoDay() {
-  const n = new Date();
-  if (n.getHours() < 7) n.setDate(n.getDate() - 1);
-  return n;
-}
-function fortuneHTML(i) {
-  const d = horoDay();
-  const seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
-  const stars = 3 + ((seed + i * 7) % 3);
-  const idx = (seed * 3 + i * 5) % FORTUNES.length;
-  const text = FORTUNES[idx];
-  const item = LUCKY[idx];
-  return "<span class='stars'>" + "★".repeat(stars) + "</span> " + text +
-    "<br><span class='lucky'>ラッキーアイテム：" + item + "</span>";
-}
+/* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
+const KOKUUSA = { dateLabel: "10月27日（火）", count: 19, detail: "橋本みきひこ、近藤雅彦、高沢かずもと、向山好一、このみ亮太郎、鍋島せり、村岡としひで、臼木ひでたけ、田中けん、小林さやか、平戸航太、牛田まゆ、伊藤たかえ、伊藤たつお、浜口誠、竹詰ひとし、はが道也、原田ひでかず、山田吉彦", trivia: "うさぎの視野はほぼ360度あるんだって。真後ろ以外は見えているから、後ろからこっそり近づいてもバレちゃうよ。" };
 function openKokuusa() {
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
@@ -1660,24 +1616,8 @@ function openKokuusa() {
   body.appendChild(row);
   const card = document.createElement("div");
   card.className = "card horo-card";
-  card.innerHTML = '<b class="label">今日の星座占い</b><br><select id="horoSelect" aria-label="星座を選ぶ"></select><div class="horo-fortune" id="horoFortune"></div>';
+  card.innerHTML = '<b class="label">こくうさ雑学</b><div class="horo-fortune">' + KOKUUSA.trivia + "</div>";
   body.appendChild(card);
-  const sel = card.querySelector("#horoSelect");
-  const out = card.querySelector("#horoFortune");
-  SIGNS.forEach((name, i) => {
-    const o = document.createElement("option");
-    o.value = i; o.textContent = name + "の今日の運勢";
-    sel.appendChild(o);
-  });
-  let saved = 0;
-  try { saved = Number(localStorage.getItem("kokuusa-sign") || 0); } catch (e) {}
-  sel.value = String(Math.min(Math.max(saved, 0), 11));
-  const draw = () => {
-    out.innerHTML = fortuneHTML(Number(sel.value));
-    try { localStorage.setItem("kokuusa-sign", sel.value); } catch (e) {}
-  };
-  sel.addEventListener("change", draw);
-  draw();
   document.getElementById("findInput").value = ""; clearHits();
   document.getElementById("threadPlaceholder").style.display = "none";
   const bar = document.getElementById("findBar");
