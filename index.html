@@ -1595,7 +1595,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "10月28日（水）", count: 0, detail: "質疑の予定はまだ入っていないよ", trivia: "うさぎの歯は一生伸び続けるんだよ。だから硬いものを齧って、伸びすぎないように削っているんだ。" };
+const KOKUUSA = { dateLabel: "10月28日（水）", count: 14, detail: "森ようすけ、浅野さとし、おだけかい、西岡よしたか、西岡秀子、森ようすけ、深作ヘスス、かわい昭成、佐々木まこと、野村みほ、臼木ひでたけ、かごしま彰宏、村岡としひで、長友しんじ", trivia: "うさぎの歯は一生伸び続けるんだよ。だから硬いものを齧って、伸びすぎないように削っているんだ。" };
 function openKokuusa() {
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
