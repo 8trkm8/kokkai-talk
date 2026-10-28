@@ -1595,7 +1595,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "10月27日（火）", count: 19, detail: "橋本みきひこ、近藤雅彦、高沢かずもと、向山好一、このみ亮太郎、鍋島せり、村岡としひで、臼木ひでたけ、田中けん、小林さやか、平戸航太、牛田まゆ、伊藤たかえ、伊藤たつお、浜口誠、竹詰ひとし、はが道也、原田ひでかず、山田吉彦", trivia: "うさぎの視野はほぼ360度あるんだって。真後ろ以外は見えているから、後ろからこっそり近づいてもバレちゃうよ。" };
+const KOKUUSA = { dateLabel: "10月28日（水）", count: 0, detail: "質疑の予定はまだ入っていないよ", trivia: "うさぎの歯は一生伸び続けるんだよ。だから硬いものを齧って、伸びすぎないように削っているんだ。" };
 function openKokuusa() {
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
