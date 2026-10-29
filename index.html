@@ -55,6 +55,18 @@
   .row.right .speaker { text-align: right; }
   .bubble { font-size: 13.5px; line-height: 1.6; padding: 8px 11px; border-radius: 14px; background: #fff; }
   .row.right .bubble { background: #043e80; color: #fff; }
+  .font-switch { margin-left: auto; display: flex; gap: 4px; flex: none; }
+  .font-switch button { border: 1px solid rgba(255,255,255,.65); background: transparent; color: #fff; border-radius: 999px; padding: 3px 10px; font-size: 12px; cursor: pointer; }
+  .font-switch button.active { background: #f5b500; border-color: #f5b500; color: #043e80; font-weight: 700; }
+  body[data-font="s"] .bubble { font-size: 12.5px; }
+  body[data-font="s"] .card { font-size: 12px; }
+  body[data-font="s"] .speaker { font-size: 10.5px; }
+  body[data-font="s"] .full-doc { font-size: 13px; }
+  body[data-font="l"] .bubble { font-size: 15.5px; }
+  body[data-font="l"] .card { font-size: 14.5px; }
+  body[data-font="l"] .speaker { font-size: 12.5px; }
+  body[data-font="l"] .full-doc { font-size: 16px; }
+  body[data-font="l"] .full-link { font-size: 14.5px; }
   .full-link { align-self: stretch; text-align: center; background: #043e80; color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 11px; }
   .pending { background: #fff; border-radius: 12px; padding: 12px; font-size: 13px; line-height: 1.7; }
   .hidden { display: none; }
@@ -126,6 +138,11 @@ mark.hit.current{background:#ff7b00;color:#fff;}
         <div>
           <h1 id="threadName" style="font-size:17px;"></h1>
           <p id="threadSub"></p>
+        </div>
+        <div class="font-switch" role="group" aria-label="文字サイズ">
+          <button type="button" data-font-btn="s">小</button>
+          <button type="button" data-font-btn="m">中</button>
+          <button type="button" data-font-btn="l">大</button>
         </div>
       </div>
     </header>
@@ -1618,6 +1635,19 @@ const listView = document.getElementById("listView");
 const threadView = document.getElementById("threadView");
 
 let currentTab = "cats";
+function applyFontSize(v) {
+  document.body.dataset.font = v;
+  document.querySelectorAll("[data-font-btn]").forEach(b => b.classList.toggle("active", b.dataset.fontBtn === v));
+  try { localStorage.setItem("kt-font", v); } catch (e) {}
+}
+document.querySelectorAll("[data-font-btn]").forEach(b => b.addEventListener("click", () => applyFontSize(b.dataset.fontBtn)));
+(function initFontSize() {
+  let v = "m";
+  try { v = localStorage.getItem("kt-font") || "m"; } catch (e) {}
+  if (!["s", "m", "l"].includes(v)) v = "m";
+  document.body.dataset.font = v;
+  document.querySelectorAll("[data-font-btn]").forEach(b => b.classList.toggle("active", b.dataset.fontBtn === v));
+})();
 function addKokuusaRow(filter) {
   if (!("こくうさ" + KOKUUSA.dateLabel + "質疑" + KOKUUSA.count + "こくうさ雑学").includes(filter)) return;
   const row = document.createElement("div");
