@@ -2141,7 +2141,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "10月29日（木）", count: 3, detail: "高沢かずもとさん、このみ亮太郎さん、浅野さとしさん", trivia: "うさぎは汗をかかないんだって。体温の調節は、大きな耳の血管が担当しているよ。" };
+const KOKUUSA = { dateLabel: "10月30日（金）", count: 12, detail: "鍋島せりさん、向山好一さん、岡野純子さん、西岡よしたかさん、森ようすけさん、田中けんさん、近藤雅彦さん、かわい昭成さん、丹野みどりさん、おだけかいさん、井戸まさえさん、鈴木よしひろさん", trivia: "うさぎの耳は、右と左で別々に動かせるんだ。音のする方をそれぞれ向けるよ。" };
 function openKokuusa() {
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
