@@ -16,6 +16,10 @@
   header p { font-size: 11px; opacity: .75; margin-top: 3px; }
   .search { padding: 10px 12px; background: #f2f4f6; border-bottom: 1px solid #e2e7ec; }
   .search input { width: 100%; padding: 9px 12px; border: 1px solid #ccd4dc; border-radius: 999px; font-size: 14px; background: #fff; }
+  .ft-head { padding: 14px 14px 4px; font-size: 12px; font-weight: 700; color: #55606a; }
+  .ft-loading { padding: 14px; font-size: 12px; color: #8a97a3; }
+  .ft-snippet { font-size: 12px; color: #55606a; line-height: 1.5; margin-top: 3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ft-snippet mark { background: #f5b500; color: #222; border-radius: 2px; padding: 0 1px; }
   .talk-list { flex: 1; }
   .talk { display: flex; gap: 11px; padding: 12px; border-bottom: 1px solid #edf0f3; cursor: pointer; align-items: flex-start; }
   .talk:active { background: #f2f7f5; }
@@ -1798,6 +1802,7 @@ function renderList(filter = "") {
         talkList.appendChild(row);
       });
   }
+  renderFtResults(filter);
   if (!talkList.children.length) {
     talkList.innerHTML = '<div style="padding:22px;text-align:center;color:#8a97a3;font-size:13px;">見つかりませんでした</div>';
   }
@@ -1978,6 +1983,64 @@ syncLayout();
 document.getElementById("searchBox").addEventListener("input", e => renderList(e.target.value.trim()));
 document.getElementById("tabMembers").addEventListener("click", () => setTab("members"));
 document.getElementById("tabCats").addEventListener("click", () => setTab("cats"));
+
+/* full-text search (index built by make-search-index.py) */
+let FT_INDEX = null, FT_LOADING = false;
+function escHtml(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function ensureFtIndex() {
+  if (FT_INDEX || FT_LOADING) return;
+  FT_LOADING = true;
+  fetch("fulltext-index.json").then(r => r.json()).then(d => {
+    FT_INDEX = d; FT_LOADING = false;
+    renderList(document.getElementById("searchBox").value.trim());
+  }).catch(() => { FT_LOADING = false; FT_INDEX = []; });
+}
+function renderFtResults(filter) {
+  if (!filter) return;
+  ensureFtIndex();
+  if (!FT_INDEX) {
+    const d = document.createElement("div");
+    d.className = "ft-loading"; d.textContent = "全文も検索しています…";
+    talkList.appendChild(d);
+    return;
+  }
+  const hits = [];
+  FT_INDEX.forEach(e => {
+    const i = e.t.indexOf(filter);
+    if (i < 0) return;
+    let found = null;
+    MEMBERS.forEach(m => m.articles.forEach(a => { if (!found && a.fullUrl === e.u) found = { m, a }; }));
+    if (found) hits.push({ e, i, m: found.m, a: found.a });
+  });
+  hits.sort((x, y) => (articleTime(y.a) || 0) - (articleTime(x.a) || 0));
+  if (!hits.length) return;
+  const head = document.createElement("div");
+  head.className = "ft-head";
+  head.textContent = "全文から見つかった記事（" + hits.length + "件）";
+  talkList.appendChild(head);
+  hits.slice(0, 30).forEach(h => {
+    const row = document.createElement("div");
+    row.className = "talk";
+    const start = Math.max(0, h.i - 30);
+    const snipHtml = (start > 0 ? "…" : "") +
+      escHtml(h.e.t.slice(start, h.i)) +
+      "<mark>" + escHtml(filter) + "</mark>" +
+      escHtml(h.e.t.slice(h.i + filter.length, h.i + filter.length + 42)) + "…";
+    row.innerHTML =
+      '<div class="avatar">' + h.m.initial + "</div>" +
+      '<div class="talk-main"><div class="talk-top"><span class="talk-name">' + h.m.name + '</span>' +
+      '<span class="talk-date">' + (articleDateLabel(h.a) || "") + "</span></div>" +
+      '<div class="talk-preview">' + h.a.title + "</div>" +
+      '<div class="ft-snippet">' + snipHtml + "</div></div>";
+    row.addEventListener("click", async () => {
+      await openFull(h.m, h.a);
+      const fi = document.getElementById("findInput");
+      fi.value = filter;
+      runFind();
+    });
+    talkList.appendChild(row);
+  });
+}
 
 /* in-article find */
 let hitMarks = [], hitIdx = -1;
