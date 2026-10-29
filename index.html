@@ -1587,6 +1587,28 @@ const MEMBERS = [
         { side: "left", speaker: "かごしま彰宏", text: "更新期間中に手術をした場合、残りの期間は前の写真で通用している。家族の心情に配慮した特例を検討してほしい。" }
       ],
       memo: "かごしま議員は今国会からデジタル・AI特別委員会に加わり、6月の決算委員会での「マイナンバー制度を拡充すべき」との質問の続編として、自身の地元・横浜市と前住地の板橋区の違い（所得証明がマイナカードで出せるか否か）を実例に、自治体ごとのばらつきを突いた。厚労省・総務省の個別答弁を聞いた上で「個別の制度は各省所管だからこそデジタル庁が前面に」と大臣に迫る構成。締めの重度障害者の写真問題は知人の家族の話に基づくもので、大臣は口腔がん患者の例を挙げて共感を示しつつ「慎重」と答えた。クラウドの責任分界は「この委員会では扱えない」として質問せず、大臣への問題提起にとどめた。"
+    }] },
+  { id: "konomi", cats: [{ id: "work", label: "働き方", icon: "💼", preview: "特定疾病の請求時効は2年から5年へ延長。だが勤務記録の保存は「ガイドラインで3年」のままで、5年義務化は約束されず。" }, { id: "justice", label: "法務・人権", icon: "⚖️", preview: "遺族補償年金の父母・祖父母の55歳以上・障害要件は「労災・国家公務員と同じく従前通り」と大臣。地方公務員での先行見直しには答えず。" }], name: "このみ亮太郎", initial: "こ", dateLabel: "10/29", unread: 1, addedOn: "2026-10-29",
+    preview: "遺族補償年金の父母・祖父母要件は「労災・国家公務員と同じく従前通り」、時効5年化に対し勤務記録の保存は「ガイドラインで3年」。5年義務化は約束されず。",
+    articles: [
+    {
+      date: "2026年10月29日", committee: "衆議院・総務委員会",
+      cats: ["work", "justice"],
+      title: "「親を養うために地元で公務員になった人の遺族は救われない」このみ議員、遺族補償年金の父母要件と勤務記録の5年保存義務化を迫る——総務省「3年保存を助言」",
+      summary: "",
+      noteUrl: "https://note.com/tamakitext/n/n969515977062",
+      fullUrl: "full/2026-10-29-konomi.html",
+      bubbles: [
+        { side: "left", speaker: "このみ亮太郎", text: "配偶者の男女差は撤廃されるが、父母・祖父母には55歳以上や障害の要件が残る。親を養うため地元で公務員になる人も多い。合理性は。" },
+        { side: "right", speaker: "藤井総務大臣", text: "55歳未満の夫・父母・祖父母は自活可能と判断された経緯があり、今回は夫のみの要件を撤廃し、男女差のない父母・祖父母は従前通りです。" },
+        { side: "right", speaker: "藤井総務大臣", text: "地方公務員は国家公務員と、国家公務員は労災保険との均衡を考慮し、両制度とも父母・祖父母は従前通りです。見直しは両制度の動向次第。" },
+        { side: "left", speaker: "このみ亮太郎", text: "地方公務員は親元で働く思いが強い。総務省が先行して直系尊属を認める動きを。誰を扶養しているか職員が選べる仕組みも必要だ。" },
+        { side: "left", speaker: "このみ亮太郎", text: "脳・心臓疾患や精神疾患、石綿疾病の請求時効を2年から5年に延ばすのは前向きだ。周知と、勤務記録など客観データの保存義務化は。" },
+        { side: "right", speaker: "野村公務員部長", text: "法案成立後、速やかに災害補償基金と各自治体に通知します。労働時間の記録は厚労省ガイドラインで3年保存とされ、自治体に助言中です。" },
+        { side: "right", speaker: "野村公務員部長", text: "ガイドラインは改正されていませんが、既に時効5年の補償もあり、残存記録や関係者聴取で適正に認定しています。医療記録は5年保存です。" },
+        { side: "left", speaker: "このみ亮太郎", text: "周知だけでは、書類が破棄された後に「知らなかった」と泣き寝入りする遺族を救えない。3年は引っかかる。法定の5年に合わせた義務化を。" }
+      ],
+      memo: "議員は法案を評価しつつ、取り残される人に絞った。根拠は福岡の3市7町の職員から聞いた「親のもとで働きたいから地元を選んだ」という声。時効5年化と保存3年のずれが軸で、政府は現行維持の説明にとどまった。"
     }] }
 ];
 
@@ -1768,11 +1790,6 @@ function renderArticle(body, member, a) {
     link.textContent = "全文文字起こしを読む";
     link.addEventListener("click", ev => { ev.preventDefault(); openFull(member, a); });
     body.appendChild(link);
-    const sub = document.createElement("a");
-    sub.className = "full-link"; sub.href = a.noteUrl; sub.target = "_blank"; sub.rel = "noopener";
-    sub.style.fontSize = "13px"; sub.style.opacity = "0.75";
-    sub.textContent = "noteでも読む";
-    body.appendChild(sub);
   } else {
     const link = document.createElement("a");
     link.className = "full-link"; link.href = a.noteUrl; link.target = "_blank"; link.rel = "noopener";
