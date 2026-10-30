@@ -2147,7 +2147,11 @@ function renderArticle(body, member, a) {
   }
   const card = document.createElement("div");
   card.className = "card";
-  card.innerHTML = '<b class="label">1分要約</b><br><strong>' + a.title + "</strong>" + (a.summary ? "<br>" + (a.summary.includes("\n") ? a.summary.split("\n").map(l => "・" + l).join("<br>") : a.summary) : "");
+  if (a.summary && a.summary.includes("\n")) {
+    card.innerHTML = '<b class="label">こんなテーマを質疑しました</b><br>' + a.summary.split("\n").map(l => "・" + l).join("<br>");
+  } else {
+    card.innerHTML = '<b class="label">1分要約</b><br><strong>' + a.title + "</strong>" + (a.summary ? "<br>" + a.summary : "");
+  }
   body.appendChild(card);
   a.bubbles.forEach(b => {
     const row = document.createElement("div");
