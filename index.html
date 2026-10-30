@@ -531,7 +531,7 @@ const MEMBERS = [
       date: "2026年10月30日", committee: "衆議院・法務委員会",
       cats: ["justice", "children"],
       title: "法テラスのチャットボットは「生成AIではない」、報酬は20年据え置き——井戸議員、生成AIで本人訴訟に勝った事例から司法アクセスの空白を問う",
-      summary: "",
+      summary: "生成AIを用いた本人訴訟の広がり\n法テラスの利用実態\n家事事件における本人申立ての多さ\n民事法律扶助の担い手の確保\n法テラスの生成AI活用状況\n民事裁判のオンライン化と安全\n生成AIと弁護士法72条の関係\n裁判所の生成AI活用の検証\n戸籍英訳証明書の自治体格差",
       noteUrl: "https://note.com/tamakitext/n/nae1b8a73266f",
       fullUrl: "full/2026-10-30-ido.html", pub: 71,
       bubbles: [
@@ -2147,7 +2147,7 @@ function renderArticle(body, member, a) {
   }
   const card = document.createElement("div");
   card.className = "card";
-  card.innerHTML = '<b class="label">1分要約</b><br><strong>' + a.title + "</strong><br>" + a.summary;
+  card.innerHTML = '<b class="label">1分要約</b><br><strong>' + a.title + "</strong>" + (a.summary ? "<br>" + (a.summary.includes("\n") ? a.summary.split("\n").map(l => "・" + l).join("<br>") : a.summary) : "");
   body.appendChild(card);
   a.bubbles.forEach(b => {
     const row = document.createElement("div");
