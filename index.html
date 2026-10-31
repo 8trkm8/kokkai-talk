@@ -23,6 +23,8 @@
   .talk-list { flex: 1; }
   .talk { display: flex; gap: 11px; padding: 12px; border-bottom: 1px solid #edf0f3; cursor: pointer; align-items: flex-start; }
   .talk:active { background: #f2f7f5; }
+  button.talk { font: inherit; color: inherit; text-align: left; background: transparent; border: none; border-bottom: 1px solid #edf0f3; margin: 0; -webkit-appearance: none; appearance: none; }
+  .talk:focus-visible { outline: 2px solid #043e80; outline-offset: -2px; }
   .avatar { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #5b7186; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; }
   .avatar.new { background: #f5b500; color: #043e80; }
 .avatar.pic { background: #fff; border: 1px solid #e8dfc0; overflow: hidden; padding: 0; }
@@ -122,7 +124,7 @@ mark.hit.current{background:#ff7b00;color:#fff;}
       <h1>こくみんログ</h1>
       <p>国民民主党の質疑が1分で読める（非公式）</p>
     </header>
-    <div class="search"><input id="searchBox" type="search" placeholder="議員名やキーワードで検索"></div>
+    <div class="search"><input id="searchBox" type="search" placeholder="議員名やキーワードで検索" aria-label="議員名やキーワードで検索"></div>
     <div class="tabs">
       <button class="tab active" id="tabCats">テーマで見る</button>
       <button class="tab" id="tabMembers">議員で見る</button>
@@ -152,7 +154,7 @@ mark.hit.current{background:#ff7b00;color:#fff;}
       </div>
     </header>
     <div class="findbar" id="findBar">
-      <input id="findInput" type="search" placeholder="この記事内を検索">
+      <input id="findInput" type="search" placeholder="この記事内を検索" aria-label="この記事内を検索">
       <span class="count" id="findCount"></span>
       <button id="findPrev" type="button">↑</button>
       <button id="findNext" type="button">↓</button>
@@ -2125,8 +2127,9 @@ document.querySelectorAll("[data-font-btn]").forEach(b => b.addEventListener("cl
 })();
 function addKokuusaRow(filter) {
   if (!("こくうさ" + KOKUUSA.dateLabel + "質疑" + KOKUUSA.count + "こくうさ雑学").includes(filter)) return;
-  const row = document.createElement("div");
+  const row = document.createElement("button");
   row.className = "talk";
+  row.type = "button";
   row.dataset.key = "kokuusa";
   row.innerHTML =
     '<div class="avatar pic"><img src="kokuusa-icon.png" alt="こくうさ"></div>' +
@@ -2192,8 +2195,9 @@ function renderList(filter = "") {
       .filter(m => (m.name + m.preview + m.cats.map(c => c.label).join("")).includes(filter))
       .sort((x, y) => (latestArticleTime(y) || 0) - (latestArticleTime(x) || 0) || latestPub(y) - latestPub(x))
       .forEach(m => {
-        const row = document.createElement("div");
+        const row = document.createElement("button");
         row.className = "talk";
+        row.type = "button";
         row.dataset.key = m.id;
         row.innerHTML =
           '<div class="avatar' + (unreadNow(m) ? " new" : "") + '">' + m.initial + "</div>" +
@@ -2227,8 +2231,9 @@ function renderList(filter = "") {
       .sort((x, y) => (y.sortTime - x.sortTime) || (y.pubTime - x.pubTime))
       .forEach(({ cat, entries, first, dateText }) => {
         const newCount = entries.filter(e => unreadNow(e.member) > 0).length;
-        const row = document.createElement("div");
+        const row = document.createElement("button");
         row.className = "talk";
+        row.type = "button";
         row.dataset.key = cat.id;
         row.innerHTML =
           '<div class="avatar">' + cat.icon + "</div>" +
@@ -2462,8 +2467,9 @@ function renderFtResults(filter) {
   head.textContent = "全文から見つかった記事（" + hits.length + "件）";
   talkList.appendChild(head);
   hits.slice(0, 30).forEach(h => {
-    const row = document.createElement("div");
+    const row = document.createElement("button");
     row.className = "talk";
+    row.type = "button";
     const start = Math.max(0, h.i - 30);
     const snipHtml = (start > 0 ? "…" : "") +
       escHtml(h.e.t.slice(start, h.i)) +
