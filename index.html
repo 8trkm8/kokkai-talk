@@ -2401,7 +2401,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "10月30日（金）", count: 12, detail: "鍋島せりさん、向山好一さん、岡野純子さん、西岡よしたかさん、森ようすけさん、田中けんさん、近藤雅彦さん、かわい昭成さん、丹野みどりさん、おだけかいさん、井戸まさえさん、鈴木よしひろさん", trivia: "うさぎの耳は、右と左で別々に動かせるんだ。音のする方をそれぞれ向けるよ。", session: "第222回臨時国会は開会から26日目、閉会まであと43日だよ。" };
+const KOKUUSA = { dateLabel: "10月31日（土）", count: 0, detail: "質疑の予定はまだ入っていないよ", trivia: "うさぎが嬉しいと、走りながら体をひねってジャンプすることがあるよ。「ビンキー」という名前のついた喜びダンスなんだ。", session: "第222回臨時国会は開会から27日目、閉会まであと42日だよ。" };
 function openKokuusa() {
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
