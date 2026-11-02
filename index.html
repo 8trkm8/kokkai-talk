@@ -4127,10 +4127,17 @@ function escHtml(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").repl
 function ensureFtIndex() {
   if (FT_INDEX || FT_LOADING) return;
   FT_LOADING = true;
-  fetch("fulltext-index.json").then(r => r.json()).then(d => {
-    FT_INDEX = d; FT_LOADING = false;
-    renderList(document.getElementById("searchBox").value.trim());
-  }).catch(() => { FT_LOADING = false; FT_INDEX = []; });
+  const parts = [];
+  const load = n => {
+    const name = n === 1 ? "fulltext-index.json" : "fulltext-index-" + n + ".json";
+    fetch(name).then(r => { if (!r.ok) throw new Error("no more parts"); return r.json(); })
+      .then(d => { parts.push(...d); load(n + 1); })
+      .catch(() => {
+        FT_INDEX = parts; FT_LOADING = false;
+        renderList(document.getElementById("searchBox").value.trim());
+      });
+  };
+  load(1);
 }
 function renderFtResults(filter) {
   if (!filter) return;
