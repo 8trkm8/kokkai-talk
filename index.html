@@ -9,6 +9,7 @@
 <meta name="description" content="国民民主党の今日最新の質疑を、トーク画面のような形で1分で読める要約サイト（非公式）">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   body { font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; background: #dfe5ea; color: #222; }
   .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #fff; display: flex; flex-direction: column; box-shadow: 0 0 24px rgba(0,0,0,.12); }
   header { position: sticky; top: 0; z-index: 10; background: #043e80; color: #fff; padding: 14px 16px 10px; }
@@ -73,6 +74,18 @@
   body[data-font="l"] .speaker { font-size: 13px; }
   body[data-font="l"] .full-doc { font-size: 17px; }
   body[data-font="l"] .full-link { font-size: 15px; }
+  body[data-font="s"] .talk-name { font-size: 13.5px; }
+  body[data-font="s"] .talk-preview { font-size: 11px; }
+  body[data-font="s"] .talk-date { font-size: 10px; }
+  body[data-font="s"] .cat-meta { font-size: 10px; }
+  body[data-font="s"] .ft-head { font-size: 11px; }
+  body[data-font="s"] .ft-snippet { font-size: 11px; }
+  body[data-font="l"] .talk-name { font-size: 17px; }
+  body[data-font="l"] .talk-preview { font-size: 14.5px; }
+  body[data-font="l"] .talk-date { font-size: 12.5px; }
+  body[data-font="l"] .cat-meta { font-size: 12.5px; }
+  body[data-font="l"] .ft-head { font-size: 13.5px; }
+  body[data-font="l"] .ft-snippet { font-size: 13.5px; }
   .full-link { align-self: stretch; text-align: center; background: #043e80; color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 11px; }
   .pending { background: #fff; border-radius: 12px; padding: 12px; font-size: 13px; line-height: 1.7; }
   .hidden { display: none; }
