@@ -43,6 +43,18 @@
   .talk-preview { font-size: 12.5px; color: #66727d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
   .badge { flex: none; min-width: 19px; height: 19px; border-radius: 999px; background: #e5484d; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 5px; margin-top: 16px; }
   footer { padding: 14px 16px 20px; font-size: 11px; color: #77828c; background: #f7f9fa; line-height: 1.7; }
+
+  /* bill memo */
+  .bill-pin { display: block; width: 100%; text-align: left; background: #fffbe9; border: 1px solid #f5b500; border-radius: 12px; padding: 12px 14px; font: inherit; color: inherit; cursor: pointer; }
+  .bill-pin b { color: #043e80; }
+  .bill-pin .sub { display: block; font-size: 12px; color: #66727d; margin-top: 3px; }
+  .bill-toggle { display: flex; gap: 8px; }
+  .bill-toggle button { flex: 1; padding: 9px 6px; border-radius: 999px; border: 1px solid #043e80; background: #fff; color: #043e80; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+  .bill-toggle button.active { background: #043e80; color: #fff; }
+  .bill-sec h3 { font-size: 14.5px; color: #043e80; margin-bottom: 5px; }
+  .bill-sec { line-height: 1.7; font-size: 13.5px; }
+  .bill-link { display: block; text-align: center; background: #eef4fb; border: 1px solid #b9cfe8; color: #043e80; border-radius: 10px; padding: 10px; font-size: 13.5px; font-weight: 700; text-decoration: none; cursor: pointer; }
+  .bill-src { font-size: 11px; color: #77828c; line-height: 1.6; padding: 0 2px; }
   /* thread */
   .thread-head { display: flex; align-items: center; gap: 10px; }
   .back { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 2px 4px; }
@@ -5924,6 +5936,312 @@ function markRead(m) {
     localStorage.setItem("kt-read", JSON.stringify(st));
   } catch (e) {}
 }
+const BILLS = [
+ {
+  "id": "keishoku",
+  "name": "警職法改正案（遠隔解析）",
+  "formal": "警察官職務執行法の一部を改正する法律案（閣法・第222回国会 提出番号15）",
+  "cat": "justice",
+  "asOf": "2026年11月8日時点",
+  "scope": "国民民主党の質疑をもとに作っています",
+  "soft": [
+   {
+    "h": "この法案はどんなもの？",
+    "lines": [
+     "よび名：警職法（けいしょくほう）改正案。犯罪の被害を防ぐための法案",
+     "正式な名前：警察官職務執行法の一部を改正する法律案（内閣が出した法案・提出番号15）"
+    ]
+   },
+   {
+    "h": "今どこまで進んでいる？",
+    "lines": [
+     "話し合いの途中。衆議院の内閣委員会では可決ずみ（11月6日・付帯決議つき）。衆議院の本会議と参議院は、まだこれから"
+    ]
+   },
+   {
+    "h": "なぜこの法案が出てきたの？",
+    "lines": [
+     "①背景：政府（警察庁）は、正体を隠した流動的な犯罪グループによる強盗や詐欺が全国で多く起きていて、見つかりにくい通信アプリが悪用されるため、被害を防ぐのが難しくなっていると説明している",
+     "②目的：法案の理由は、大きな犯罪の被害を防ぐための決まりを整えることと、犯人どうしの連絡などに使われたスマホやパソコンから必要な情報をとる決まりを整えることとしている"
+    ]
+   },
+   {
+    "h": "何をする法案？",
+    "lines": [
+     "大きな犯罪の被害にあいそうな人がいたら、警察官が守るための行動をとらなければいけない、という決まりを作る（第8条）",
+     "警察庁の長官が、警察官の中から「被害防止電子計算機調査官」という担当の人を決める",
+     "調査官が、犯人が連絡に使ったスマホやパソコンにつないで、必要なやりとりなどの記録をコピーできるようにする（第9条）",
+     "この調査をするには、裁判所の裁判官に「やってよい」と許可をもらう必要がある",
+     "許可された範囲に入らない記録は、人に渡さず、調査が終わったらすぐに消す",
+     "調べた相手に知らせるやり方と、公安委員会に報告してチェックしてもらうやり方も決める"
+    ]
+   },
+   {
+    "h": "関係するのはどんな人？",
+    "lines": [
+     "守られる人：大きな犯罪の被害にあいそうで、被害にあう人がはっきりしている人（「被害切迫者」）",
+     "調べられる人：犯人が連絡に使ったと考えられるスマホやパソコンなどの持ち主（原則として知らされる）",
+     "動かす人：警察庁の長官に選ばれた調査官と、被害を防ぐ行動をとる警察官",
+     "チェックする人：許可を出す裁判官と、報告を受けて確かめる公安委員会"
+    ]
+   },
+   {
+    "h": "これからの流れ",
+    "lines": [
+     "2026年10月5日　臨時国会がスタート（12月12日までの69日間）",
+     "10月16日　内閣が法案を国会に出した（まず衆議院で話し合う）",
+     "10月30日　衆議院で、内閣委員会という場に回された",
+     "11月6日　衆議院の内閣委員会で可決",
+     "これから　衆議院の本会議、そのあと参議院で話し合う（いつかはまだ決まっていない）",
+     "成立したあと　法律が公表されてから6か月以内の、政令で決める日に、決まりが動き出す"
+    ]
+   },
+   {
+    "h": "成立したら",
+    "lines": [
+     "被害にあいそうな人がいたら、警察官は、身を守る方法を教えるなどの行動を「すぐに」とらなければいけない",
+     "調査官は、裁判官の許可をもらえば、犯人が連絡に使った機器から、必要な記録をコピーできる",
+     "許可された範囲に入らない記録は、人に渡せず、調査が終わったらすぐに消さなければいけない",
+     "許可された範囲に入る記録は、調査のあと、被害を防ぐ行動をとる警察官に渡される",
+     "調べた機器の持ち主には、原則として知らせる",
+     "調査官がやったことは公安委員会に報告され、公安委員会が、きちんとやっているかをチェックする"
+    ]
+   },
+   {
+    "h": "成立しなかったら",
+    "lines": [
+     "警察官職務執行法は、今のまま変わらない",
+     "第8条（被害にあいそうな人を守る行動の決まり）は、作られない",
+     "調査官の制度と、機器につないで記録をコピーするやり方（第9条）は、作られない"
+    ]
+   },
+   {
+    "h": "法案の文章で、もう決まっていること",
+    "lines": [
+     "「大きな犯罪」とは：人の命や体を危険にさらしたり、財産に大きな損をさせたりするおそれのある犯罪。どの犯罪かの名前の一覧は、法案には書かれていない",
+     "調査ができるのは、次の3つがどれもあてはまるとき：①何人かで相談して行う大きな犯罪　②被害にあいそうな人がいて、急ぐ必要がある　③ほかの方法ではすばやく情報を集めるのがとても難しい",
+     "調査官が裁判官に許可をお願いする。許可状には、調べる機器、コピーしてよい記録の範囲、使える期間などが書かれる",
+     "調べた相手に知らせなくてよいのは、持ち主の居場所がわからないなど、知らせるのが難しいとき。知らせると被害を防ぐ行動のじゃまになるときは、じゃまにならなくなったあとで、すぐ知らせる"
+    ]
+   },
+   {
+    "h": "まだ決まっていないこと（政令や規則であとから決まる）",
+    "lines": [
+     "いつから始まるか：政令で決める（法律が公表されてから6か月以内）",
+     "記録を消すやり方：国家公安委員会の規則で決める",
+     "許可された範囲に入る記録を渡すやり方：国家公安委員会の規則で決める",
+     "機器の持ち主に知らせるやり方：国家公安委員会の規則で決める",
+     "許可が使える期間が何日か：法案には書かれていない（許可状に書かれる）",
+     "許可された範囲に入る記録を、渡したあとどうしまうか・消すか：法案の文章で決まりを確認できていない"
+    ]
+   },
+   {
+    "h": "心配ごと",
+    "lines": [
+     "・端末の情報を一旦全部取得してから選別する運用でよいのか",
+     "・消去した記録の残し方が、規則や運用に委ねられている",
+     "・国会への報告は付帯決議で求められたが、法律の決まりにはなっていない。報告や公表の範囲もまだ決まっていない",
+     "・見られた情報のうち何が消されたかは、本人に知らされない"
+    ]
+   },
+   {
+    "h": "よくある誤解",
+    "lines": [
+     "Q. 警察がスマホを自由に操作できるようになるの？",
+     "A. できません。できるのは、裁判官が許可した範囲の記録を複写・取得することだけです。送金を止めることもできないと、政府が質疑で答えています。",
+     "Q. 犯人を捕まえるための捜査の仕組み？",
+     "A. 建付けは違います。「被害を防ぐため」の行政上の調査で、裁判官の許可が要件です。",
+     "Q. 見られたことは本人に知らされるの？",
+     "A. 原則として事後に通知されます。消去した日は通知されますが、何が消去されたかは含まれないと政府が答えています。"
+    ]
+   }
+  ],
+  "hard": [
+   {
+    "h": "この法案",
+    "lines": [
+     "通称：警職法改正案（被害防止措置・電子計算機調査）",
+     "正式名称：警察官職務執行法の一部を改正する法律案（閣法・第222回国会 提出番号15）"
+    ]
+   },
+   {
+    "h": "状態",
+    "lines": [
+     "審議中（衆議院内閣委員会で11月6日に可決。付帯決議つき。衆議院本会議の議決はまだ。参議院は未付託）"
+    ]
+   },
+   {
+    "h": "なぜこの法案が出てきたか",
+    "lines": [
+     "①背景：政府（警察庁）は、匿名・流動型犯罪グループによる強盗や詐欺が全国で多発し、秘匿性の高い通信アプリが悪用されて被害の防止が難しくなっていると説明している",
+     "②目的：法案の理由は、重大犯罪による被害を防ぐ措置を整えるとともに、犯人間の連絡などに使われた電子計算機から必要な情報を取得する措置を整えることとしている"
+    ]
+   },
+   {
+    "h": "何をする法案か",
+    "lines": [
+     "重大犯罪の被害が迫る人に、警察官が被害防止の措置をとることを義務にする（第8条を新設）",
+     "警察庁長官が、警察官の中から「被害防止電子計算機調査官」を指名する",
+     "調査官が、犯人の連絡に使われたと認められる電子計算機に回線で接続し、必要な電磁的記録を複写・取得できるようにする（第9条を新設）",
+     "この調査には、地方裁判所または簡易裁判所の裁判官の許可が必要",
+     "許可の範囲に当たらない記録は、人に渡さず、調査が終わったら直ちに消去する",
+     "電子計算機の使用者への通知と、公安委員会への報告・確認の手続を定める"
+    ]
+   },
+   {
+    "h": "関係する人",
+    "lines": [
+     "守られる側：重大犯罪の被害が迫っていて、被害を受ける人が特定されている「被害切迫者」",
+     "調べられる側：犯人が連絡に使ったと認められる電子計算機の使用者（原則として通知を受ける）",
+     "運用する側：警察庁長官が指名する調査官と、被害防止の措置をとる警察官",
+     "チェックする側：許可を出す裁判官、報告を受けて確認する公安委員会"
+    ]
+   },
+   {
+    "h": "流れ",
+    "lines": [
+     "2026年10月5日　臨時国会が始まる（12月12日まで・69日間）",
+     "10月16日　内閣が法案を国会に提出（衆議院が先に審議）",
+     "10月30日　衆議院で内閣委員会に付託",
+     "11月6日　衆議院内閣委員会で可決",
+     "今後　衆議院本会議、そのあと参議院で審議（日程は分かっていない）",
+     "成立後　公布の日から6か月を超えない範囲で、政令で定める日に施行される"
+    ]
+   },
+   {
+    "h": "通ったら",
+    "lines": [
+     "警察官は、被害切迫者に被害防止の方法の指導などを「直ちに」とる義務を負う",
+     "調査官は、裁判官の許可を得て、犯人の連絡用の電子計算機から必要な記録を取得できる",
+     "許可の範囲に当たらない記録は、人に提供できず、調査が終わったら直ちに消去しなければならない",
+     "許可の範囲に当たる記録は、調査のあと、被害防止の措置をとる警察官に提供される",
+     "電子計算機の使用者には、原則として通知される",
+     "調査官の処置は公安委員会に報告され、公安委員会が適切かどうかを確認する"
+    ]
+   },
+   {
+    "h": "通らなかったら",
+    "lines": [
+     "警察官職務執行法は現行のまま",
+     "第8条（被害防止措置の義務）は新設されない",
+     "調査官の制度と、電子計算機への接続・複写の手続（第9条）は設けられない"
+    ]
+   },
+   {
+    "h": "条文で確定している内容",
+    "lines": [
+     "「重大犯罪」：人の生命・身体に危険を及ぼし、または財産に重大な損害を及ぼすおそれのある犯罪（個別の罪名は条文に列挙されていない）",
+     "調査ができるのは、次の3つにいずれも当たるとき：①数人の共謀による重大犯罪　②被害切迫者がいて緊急の必要がある　③他の方法では速やかな情報収集が著しく困難",
+     "調査官が裁判官に許可を請求し、許可状には対象の電子計算機・記録の範囲・有効期間などを記載する",
+     "通知しなくてよいのは、使用者の所在不明など通知が困難な場合。通知で被害防止措置が妨げられるおそれがあるときは、そのおそれがなくなった後に速やかに通知する"
+    ]
+   },
+   {
+    "h": "まだ決まっていないこと（政令・規則など）",
+    "lines": [
+     "施行日：政令で決める（公布から6か月を超えない範囲）",
+     "記録の消去の方法：国家公安委員会規則で決める",
+     "許可の範囲に当たる記録の提供の方法：国家公安委員会規則で決める",
+     "使用者への通知の方法：国家公安委員会規則で決める",
+     "許可の有効期間の日数：条文に定めがない（許可状に記載される）",
+     "許可の範囲に当たる記録を、提供のあとどう保存・消去するか：条文で定めを確認できていない"
+    ]
+   },
+   {
+    "h": "心配ごと",
+    "lines": [
+     "・端末の情報を一旦全部取得してから選別する運用でよいのか",
+     "・消去した記録の残し方が、規則や運用に委ねられている",
+     "・国会への報告は付帯決議で求められたが、法律の決まりにはなっていない。報告や公表の範囲もまだ決まっていない",
+     "・見られた情報のうち何が消されたかは、本人に知らされない"
+    ]
+   },
+   {
+    "h": "よくある誤解",
+    "lines": [
+     "Q. 警察がスマホを自由に操作できるようになるの？",
+     "A. できません。できるのは、裁判官が許可した範囲の記録を複写・取得することだけです。送金を止めることもできないと、政府が質疑で答えています。",
+     "Q. 犯人を捕まえるための捜査の仕組み？",
+     "A. 建付けは違います。「被害を防ぐため」の行政上の調査で、裁判官の許可が要件です。",
+     "Q. 見られたことは本人に知らされるの？",
+     "A. 原則として事後に通知されます。消去した日は通知されますが、何が消去されたかは含まれないと政府が答えています。"
+    ]
+   }
+  ],
+  "articleUrls": [
+   "full/2026-10-30-kawai-akinari.html",
+   "full/2026-11-04-mori.html",
+   "full/2026-11-05-kawai.html",
+   "full/2026-11-05-nomura.html",
+   "full/2026-11-06-mori.html",
+   "full/2026-11-06-nomura.html"
+  ],
+  "sources": "出典：衆議院・参議院 議案情報／警察庁 提出法律案／このサイトの質疑記事"
+ }
+];
+
+
+/* ===== bill memo (法案メモ) ===== */
+let currentBill = null, currentBillVer = "soft", inBillView = false;
+function billForUrl(url) { return BILLS.find(b => b.articleUrls.includes(url)) || null; }
+function renderBillSections(body) {
+  const secs = currentBill[currentBillVer];
+  secs.forEach((s, i) => {
+    const card = document.createElement("div");
+    card.className = "card bill-sec";
+    const bodyHtml = s.lines.map(l => {
+      if (l.startsWith("Q. ")) return "<strong>" + l + "</strong>";
+      return l;
+    }).join("<br>");
+    card.innerHTML = "<h3>" + (i + 1) + ". " + s.h + "</h3>" + bodyHtml;
+    body.appendChild(card);
+  });
+}
+function openBill(bill, ver) {
+  currentBill = bill; currentBillVer = ver || "soft";
+  document.getElementById("threadName").textContent = "📋 法案メモ：" + bill.name;
+  document.getElementById("threadSub").textContent = bill.formal;
+  const body = document.getElementById("threadBody");
+  body.innerHTML = "";
+  const intro = document.createElement("div");
+  intro.className = "card";
+  intro.innerHTML = "<b class=\"label\">法案メモ</b><br><strong>" + bill.name + "</strong><br>" +
+    bill.formal + "<br><span style=\"font-size:12px;color:#66727d\">" + bill.asOf + "／" + bill.scope + "</span>";
+  body.appendChild(intro);
+  const tog = document.createElement("div");
+  tog.className = "bill-toggle";
+  [["soft", "やわらか版"], ["hard", "法律の言い回し（かたい版）"]].forEach(([v, label]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = label;
+    if (v === currentBillVer) b.className = "active";
+    b.addEventListener("click", () => openBill(bill, v));
+    tog.appendChild(b);
+  });
+  body.appendChild(tog);
+  const secWrap = document.createElement("div");
+  secWrap.style.display = "contents";
+  body.appendChild(secWrap);
+  renderBillSections(secWrap);
+  const chip = document.createElement("div");
+  chip.className = "date-chip"; chip.textContent = "この法案の質疑";
+  body.appendChild(chip);
+  const items = [];
+  MEMBERS.forEach(m => m.articles.forEach(a => { if (bill.articleUrls.includes(a.fullUrl)) items.push({ m, a }); }));
+  items.sort((x, y) => (articleTime(y.a) || 0) - (articleTime(x.a) || 0) || ((y.a.pub || 0) - (x.a.pub || 0)));
+  const seen = new Set();
+  inBillView = true;
+  items.forEach(({ m, a }) => { const k = (a.fullUrl || "") + "|" + a.title; if (seen.has(k)) return; seen.add(k); renderArticle(body, m, a); });
+  inBillView = false;
+  const src = document.createElement("div");
+  src.className = "bill-src"; src.textContent = bill.sources;
+  body.appendChild(src);
+  document.getElementById("findInput").value = ""; clearHits();
+  document.getElementById("threadPlaceholder").style.display = "none";
+  if (!isDesktop()) listView.style.display = "none";
+  threadView.style.display = "flex";
+  window.scrollTo(0, 0);
+}
+
 function renderList(filter = "") {
   talkList.innerHTML = "";
   if (currentTab === "members") {
@@ -6043,6 +6361,14 @@ function renderArticle(body, member, a) {
   memo.className = "card memo";
   memo.innerHTML = '<b class="label">こくうさメモ</b><br>' + a.memo;
   body.appendChild(memo);
+  const billOfA = a.fullUrl ? billForUrl(a.fullUrl) : null;
+  if (billOfA && !inBillView) {
+    const bl = document.createElement("a");
+    bl.className = "bill-link"; bl.href = "#";
+    bl.textContent = "📋 この法案のメモを見る（" + billOfA.name + "）";
+    bl.addEventListener("click", ev => { ev.preventDefault(); openBill(billOfA); });
+    body.appendChild(bl);
+  }
   if (a.fullUrl) {
     const link = document.createElement("a");
     link.className = "full-link"; link.href = a.fullUrl;
@@ -6102,6 +6428,7 @@ function roomArticleCount(entries, catId) {
   return seen.size;
 }
 function openCategory(catId) {
+  inBillView = false;
   const group = MEMBERS.filter(m => m.cats.some(c => c.id === catId));
   if (!group.length) return;
   const cat = group[0].cats.find(c => c.id === catId);
@@ -6109,6 +6436,13 @@ function openCategory(catId) {
   document.getElementById("threadSub").textContent = "テーマ別の質疑";
   const body = document.getElementById("threadBody");
   body.innerHTML = "";
+  BILLS.filter(b => b.cat === catId).forEach(b => {
+    const pin = document.createElement("button");
+    pin.type = "button"; pin.className = "bill-pin";
+    pin.innerHTML = "<b>📋 法案メモ：" + b.name + "</b><span class=\"sub\">この法案の質疑を読む前に（やわらか版あり）</span>";
+    pin.addEventListener("click", () => openBill(b));
+    body.appendChild(pin);
+  });
   const seenRoom = new Set();
   const roomItems = [];
   group.forEach(m => m.articles.forEach(a => { if (!a.cats || a.cats.includes(catId)) roomItems.push({ m, a }); }));
@@ -6129,6 +6463,7 @@ function openCategory(catId) {
 }
 
 function openThread(member) {
+  inBillView = false;
   document.getElementById("threadName").textContent = member.name;
   document.getElementById("threadSub").textContent = member.articles[0].committee || "国会質疑";
   const body = document.getElementById("threadBody");
