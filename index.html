@@ -8543,7 +8543,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月6日（金）", count: 12, detail: "9:27 衆）財務金融 田中けん\n10:32 衆）財務金融 近藤雅彦\n10:35 参）政治改革 原田ひでかず\n10:50 参）拉致問題等 川合孝典\n10:52 衆）地域・こども・デジタル 日野さりあ\n10:55 衆）法務 おだけかい\n11:05 衆）経済産業 丹野みどり\n11:15 衆）法務 井戸まさえ\n11:32 衆）内閣 野村美穂\n11:40 衆）経済産業 鈴木よしひろ\n本会議終了後 衆）経済産業 鈴木よしひろ\n本会議終了後 衆）内閣 森ようすけ\n財金委は9〜10時、高市総理に質疑だよ", trivia: "国会の会議録は、明治時代の第1回帝国議会から速記で記録されてきたんだって。今の文字起こしのご先祖さまみたいな仕事だね。", session: "第222回臨時国会は開会から33日目、閉会まであと36日だよ。" };
+const KOKUUSA = { dateLabel: "11月9日（月）", count: 0, detail: "今日は質疑の予定はないけど、国会ではちょっと特別なことがあるよ。ベトナムのいちばん偉い人、トー・ラム書記長兼国家主席が衆議院の本会議場で演説するんだ（午後）。\n\n日本とベトナムは仲良しの国。ベトナムにとって日本は、いちばん格の高い「仲良しパートナー」のひとつなんだって。今年5月に高市総理がベトナムに行ったとき「日本にも来てね」と誘っていて、その約束で来てくれたんだよ。", trivia: "英語で国会を表す「Diet」は、「日」を意味するラテン語に由来すると言われているよ。会議は毎日開くもの、という意味合いなんだって。", session: "第222回臨時国会は開会から36日目、閉会まであと33日だよ。" };
 function openKokuusa() {
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
