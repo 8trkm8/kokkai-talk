@@ -6200,6 +6200,14 @@ function renderBillSections(body) {
     body.appendChild(card);
   });
 }
+function jumpToArticle(member, a) {
+  openThread(member);
+  const key = member.id + "|" + (a.fullUrl || a.noteUrl || "") + "|" + a.title;
+  requestAnimationFrame(() => {
+    const chips = document.querySelectorAll("#threadBody [data-anchor]");
+    for (const el of chips) { if (el.dataset.anchor === key) { el.scrollIntoView({ block: "start" }); break; } }
+  });
+}
 function openBill(bill, ver) {
   currentBill = bill; currentBillVer = ver || "soft";
   document.getElementById("threadName").textContent = "📋 法案メモ：" + bill.name;
@@ -6231,10 +6239,19 @@ function openBill(bill, ver) {
   const items = [];
   MEMBERS.forEach(m => m.articles.forEach(a => { if (bill.articleUrls.includes(a.fullUrl)) items.push({ m, a }); }));
   items.sort((x, y) => (articleTime(y.a) || 0) - (articleTime(x.a) || 0) || ((y.a.pub || 0) - (x.a.pub || 0)));
-  const seen = new Set();
-  inBillView = true;
-  items.forEach(({ m, a }) => { const k = (a.fullUrl || "") + "|" + a.title; if (seen.has(k)) return; seen.add(k); renderArticle(body, m, a); });
-  inBillView = false;
+  const seenDay = new Map();
+  items.forEach(({ m, a }) => {
+    const key = m.id + "|" + a.date;
+    const rel = /遠隔解析|警職法|警察官職務執行法/.test((a.title || "") + (a.summary || "") + (a.committee || ""));
+    if (!seenDay.has(key) || (rel && !seenDay.get(key).rel)) seenDay.set(key, { m, a, rel });
+  });
+  [...seenDay.values()].forEach(({ m, a }) => {
+    const row = document.createElement("button");
+    row.type = "button"; row.className = "bill-pin";
+    row.innerHTML = "<b>" + articleDateLabel(a) + "　" + m.name + "</b>";
+    row.addEventListener("click", () => jumpToArticle(m, a));
+    body.appendChild(row);
+  });
   const src = document.createElement("div");
   src.className = "bill-src"; src.textContent = bill.sources;
   body.appendChild(src);
@@ -6267,8 +6284,9 @@ function openBillIndex() {
   const body = document.getElementById("threadBody");
   body.innerHTML = "";
   BILLS.forEach(b => {
-    let n = 0;
-    MEMBERS.forEach(m => m.articles.forEach(a => { if (b.articleUrls.includes(a.fullUrl)) n++; }));
+    const daySet = new Set();
+    MEMBERS.forEach(m => m.articles.forEach(a => { if (b.articleUrls.includes(a.fullUrl)) daySet.add(m.id + "|" + a.date); }));
+    const n = daySet.size;
     const pin = document.createElement("button");
     pin.type = "button"; pin.className = "bill-pin";
     pin.innerHTML = "<b>📋 " + b.name + "</b><span class=\"sub\">" + b.statusShort + "／この法案の質疑 " + n + "件／" + b.asOf + "</span>";
@@ -6374,6 +6392,7 @@ function setTab(tab) {
 function renderArticle(body, member, a) {
   const date = document.createElement("div");
   date.className = "date-chip"; date.textContent = a.date + "｜" + member.name;
+  date.dataset.anchor = member.id + "|" + (a.fullUrl || a.noteUrl || "") + "|" + a.title;
   body.appendChild(date);
   if (a.committee) {
     const c = document.createElement("div");
