@@ -54,6 +54,10 @@
   .bill-sec h3 { font-size: 14.5px; color: #043e80; margin-bottom: 5px; }
   .bill-sec { line-height: 1.7; font-size: 13.5px; }
   .bill-link { display: block; text-align: center; background: #eef4fb; border: 1px solid #b9cfe8; color: #043e80; border-radius: 10px; padding: 10px; font-size: 13.5px; font-weight: 700; text-decoration: none; cursor: pointer; }
+  .bill-line { margin-bottom: 7px; }
+  .bill-line:last-child { margin-bottom: 0; }
+  .bill-line.bill-pt { margin-top: 12px; }
+  .bill-pending { opacity: .55; cursor: default; }
   .bill-src { font-size: 11px; color: #77828c; line-height: 1.6; padding: 0 2px; }
   /* thread */
   .thread-head { display: flex; align-items: center; gap: 10px; }
@@ -5948,7 +5952,8 @@ const BILLS = [
    {
     "h": "この法案はどんなもの？",
     "lines": [
-     "よび名：警職法（けいしょくほう）改正案。犯罪の被害を防ぐための法案",
+     "よび名：警職法（けいしょくほう）改正案",
+     "犯罪の被害を防ぐための法案",
      "正式な名前：警察官職務執行法の一部を改正する法律案（内閣が出した法案・提出番号15）"
     ]
    },
@@ -5961,50 +5966,48 @@ const BILLS = [
    {
     "h": "なぜこの法案が出てきたの？",
     "lines": [
-     "①背景：政府（警察庁）は、正体を隠した流動的な犯罪グループによる強盗や詐欺が全国で多く起きていて、見つかりにくい通信アプリが悪用されるため、被害を防ぐのが難しくなっていると説明している",
-     "②目的：法案の理由は、大きな犯罪の被害を防ぐための決まりを整えることと、犯人どうしの連絡などに使われたスマホやパソコンから必要な情報をとる決まりを整えることとしている"
+     "①背景（政府の説明）：正体を隠した犯罪グループによる強盗や詐欺が全国で多発。見つかりにくい通信アプリの悪用で、被害を防ぐのが難しくなっている",
+     "②目的：大きな犯罪の被害を防ぐ決まりの整備と、犯人の連絡に使われたスマホやパソコンから必要な情報をとる決まりの整備"
     ]
    },
    {
     "h": "何をする法案？",
     "lines": [
-     "大きな犯罪の被害にあいそうな人がいたら、警察官が守るための行動をとらなければいけない、という決まりを作る（第8条）",
-     "警察庁の長官が、警察官の中から「被害防止電子計算機調査官」という担当の人を決める",
-     "調査官が、犯人が連絡に使ったスマホやパソコンにつないで、必要なやりとりなどの記録をコピーできるようにする（第9条）",
-     "この調査をするには、裁判所の裁判官に「やってよい」と許可をもらう必要がある",
-     "許可された範囲に入らない記録は、人に渡さず、調査が終わったらすぐに消す",
-     "調べた相手に知らせるやり方と、公安委員会に報告してチェックしてもらうやり方も決める"
+     "被害にあいそうな人がいたら、警察官が守るための行動をとらなければいけない、という決まり（第8条）",
+     "担当は、警察庁長官が警察官の中から決める「被害防止電子計算機調査官」",
+     "調査官が、犯人の連絡に使ったスマホやパソコンにつないで、必要な記録をコピーできる決まり（第9条）",
+     "この調査には、裁判官の許可が必要",
+     "許可の範囲に入らない記録は、人に渡さず、調査が終わったらすぐに消去",
+     "調べた相手への通知と、公安委員会への報告・チェックの決まりも新設"
     ]
    },
    {
     "h": "関係するのはどんな人？",
     "lines": [
-     "守られる人：大きな犯罪の被害にあいそうで、被害にあう人がはっきりしている人（「被害切迫者」）",
-     "調べられる人：犯人が連絡に使ったと考えられるスマホやパソコンなどの持ち主（原則として知らされる）",
-     "動かす人：警察庁の長官に選ばれた調査官と、被害を防ぐ行動をとる警察官",
-     "チェックする人：許可を出す裁判官と、報告を受けて確かめる公安委員会"
+     "守られる人：大きな犯罪の被害にあいそうな人（「被害切迫者」）",
+     "調べられる人：犯人が連絡に使ったと考えられるスマホやパソコンなどの持ち主（犯人とは限らない）。原則として、あとから知らされる"
     ]
    },
    {
     "h": "これからの流れ",
     "lines": [
-     "2026年10月5日　臨時国会がスタート（12月12日までの69日間）",
-     "10月16日　内閣が法案を国会に出した（まず衆議院で話し合う）",
-     "10月30日　衆議院で、内閣委員会という場に回された",
+     "2026年10月5日　臨時国会がスタート（12月12日まで）",
+     "10月16日　内閣が法案を国会に出した",
+     "10月30日　衆議院の内閣委員会に回された",
      "11月6日　衆議院の内閣委員会で可決",
-     "これから　衆議院の本会議、そのあと参議院で話し合う（いつかはまだ決まっていない）",
-     "成立したあと　法律が公表されてから6か月以内の、政令で決める日に、決まりが動き出す"
+     "これから　衆議院の本会議、そのあと参議院（時期は未定）",
+     "成立したあと　法律が公表されてから6か月以内の、政令で決める日に動き出す"
     ]
    },
    {
     "h": "成立したら",
     "lines": [
-     "被害にあいそうな人がいたら、警察官は、身を守る方法を教えるなどの行動を「すぐに」とらなければいけない",
-     "調査官は、裁判官の許可をもらえば、犯人が連絡に使った機器から、必要な記録をコピーできる",
-     "許可された範囲に入らない記録は、人に渡せず、調査が終わったらすぐに消さなければいけない",
-     "許可された範囲に入る記録は、調査のあと、被害を防ぐ行動をとる警察官に渡される",
+     "警察官は、被害にあいそうな人へ、身を守る方法を教えるなどの行動を「すぐに」とらなければいけない",
+     "調査官は、裁判官の許可をもらえば、犯人が連絡に使った機器から必要な記録をコピーできる",
+     "許可の範囲に入らない記録は、人に渡せず、調査が終わったらすぐに消去",
+     "許可の範囲に入る記録は、調査のあと、被害を防ぐ行動をとる警察官に渡される",
      "調べた機器の持ち主には、原則として知らせる",
-     "調査官がやったことは公安委員会に報告され、公安委員会が、きちんとやっているかをチェックする"
+     "調査官がやったことは公安委員会に報告され、きちんとやっているかチェックされる"
     ]
    },
    {
@@ -6028,11 +6031,9 @@ const BILLS = [
     "h": "まだ決まっていないこと（政令や規則であとから決まる）",
     "lines": [
      "いつから始まるか：政令で決める（法律が公表されてから6か月以内）",
-     "記録を消すやり方：国家公安委員会の規則で決める",
-     "許可された範囲に入る記録を渡すやり方：国家公安委員会の規則で決める",
-     "機器の持ち主に知らせるやり方：国家公安委員会の規則で決める",
+     "記録を消すやり方、許可の範囲に入る記録を渡すやり方、機器の持ち主に知らせるやり方：国家公安委員会の規則で決める",
      "許可が使える期間が何日か：法案には書かれていない（許可状に書かれる）",
-     "許可された範囲に入る記録を、渡したあとどうしまうか・消すか：法案の文章で決まりを確認できていない"
+     "許可の範囲に入る記録を、渡したあとどうしまうか・消すか：法案の文章で決まりを確認できていない"
     ]
    },
    {
@@ -6048,11 +6049,11 @@ const BILLS = [
     "h": "よくある誤解",
     "lines": [
      "Q. 警察がスマホを自由に操作できるようになるの？",
-     "A. できません。できるのは、裁判官が許可した範囲の記録を複写・取得することだけです。送金を止めることもできないと、政府が質疑で答えています。",
+     "A. できません。できるのは、裁判官が許可した範囲の記録のコピーだけ。送金を止めることもできないと、政府が質疑で答えています。",
      "Q. 犯人を捕まえるための捜査の仕組み？",
      "A. 建付けは違います。「被害を防ぐため」の行政上の調査で、裁判官の許可が要件です。",
      "Q. 見られたことは本人に知らされるの？",
-     "A. 原則として事後に通知されます。消去した日は通知されますが、何が消去されたかは含まれないと政府が答えています。"
+     "A. 原則として事後に通知。消去した日は知らされますが、何が消去されたかは含まれないと政府が答えています。"
     ]
    }
   ],
@@ -6176,7 +6177,8 @@ const BILLS = [
    "full/2026-11-06-mori.html",
    "full/2026-11-06-nomura.html"
   ],
-  "sources": "出典：衆議院・参議院 議案情報／警察庁 提出法律案／このサイトの質疑記事"
+  "sources": "出典：衆議院・参議院 議案情報／警察庁 提出法律案／このサイトの質疑記事",
+  "statusShort": "衆議院の内閣委員会で可決ずみ（11月6日・付帯決議つき）。本会議と参議院はこれから"
  }
 ];
 
@@ -6190,9 +6192,10 @@ function renderBillSections(body) {
     const card = document.createElement("div");
     card.className = "card bill-sec";
     const bodyHtml = s.lines.map(l => {
-      if (l.startsWith("Q. ")) return "<strong>" + l + "</strong>";
-      return l;
-    }).join("<br>");
+      const cls = /^[①②③]/.test(l) ? "bill-line bill-pt" : "bill-line";
+      if (l.startsWith("Q. ")) return '<div class="' + cls + '"><strong>' + l + "</strong></div>";
+      return '<div class="' + cls + '">' + l + "</div>";
+    }).join("");
     card.innerHTML = "<h3>" + (i + 1) + ". " + s.h + "</h3>" + bodyHtml;
     body.appendChild(card);
   });
@@ -6242,10 +6245,57 @@ function openBill(bill, ver) {
   window.scrollTo(0, 0);
 }
 
+const PENDING_BILLS = ["飲食料品の消費税減税＋就業者負担軽減支援金", "地方公務員災害補償法・共済組合法改正", "特定B型肝炎給付金の特別措置法改正", "特定貨物保険・特定船舶保険の履行確保", "選挙期日の臨時特例（地方議会の議員・長）", "商法・国際海上物品運送法改正（船荷証券の電子化）"];
+
+function addBillRow(filter) {
+  if (filter && !("法案メモ法案一覧".includes(filter) || BILLS.some(b => b.name.includes(filter)))) return;
+  const row = document.createElement("button");
+  row.className = "talk";
+  row.type = "button";
+  row.dataset.key = "bills";
+  row.innerHTML =
+    '<div class="avatar">📋</div>' +
+    '<div class="talk-main"><div class="talk-top"><span class="talk-name">法案メモ</span></div>' +
+    '<div class="talk-preview">法案を一覧で見る｜警職法のメモを公開中</div></div>';
+  row.addEventListener("click", () => openBillIndex());
+  talkList.appendChild(row);
+}
+function openBillIndex() {
+  inBillView = false;
+  document.getElementById("threadName").textContent = "📋 法案メモ";
+  document.getElementById("threadSub").textContent = "法案の一覧（国民民主党の質疑をもとに作っています）";
+  const body = document.getElementById("threadBody");
+  body.innerHTML = "";
+  BILLS.forEach(b => {
+    let n = 0;
+    MEMBERS.forEach(m => m.articles.forEach(a => { if (b.articleUrls.includes(a.fullUrl)) n++; }));
+    const pin = document.createElement("button");
+    pin.type = "button"; pin.className = "bill-pin";
+    pin.innerHTML = "<b>📋 " + b.name + "</b><span class=\"sub\">" + b.statusShort + "／この法案の質疑 " + n + "件／" + b.asOf + "</span>";
+    pin.addEventListener("click", () => openBill(b));
+    body.appendChild(pin);
+  });
+  const chip = document.createElement("div");
+  chip.className = "date-chip"; chip.textContent = "準備中";
+  body.appendChild(chip);
+  PENDING_BILLS.forEach(name => {
+    const d = document.createElement("div");
+    d.className = "bill-pin bill-pending";
+    d.innerHTML = "<b>" + name + "</b><span class=\"sub\">メモを準備中です</span>";
+    body.appendChild(d);
+  });
+  document.getElementById("findInput").value = ""; clearHits();
+  document.getElementById("threadPlaceholder").style.display = "none";
+  if (!isDesktop()) listView.style.display = "none";
+  threadView.style.display = "flex";
+  window.scrollTo(0, 0);
+}
+
 function renderList(filter = "") {
   talkList.innerHTML = "";
   if (currentTab === "members") {
     addKokuusaRow(filter);
+    addBillRow(filter);
     MEMBERS
       .filter(m => (m.name + m.preview + m.cats.map(c => c.label).join("")).includes(filter))
       .sort((x, y) => (latestArticleTime(y) || 0) - (latestArticleTime(x) || 0) || latestPub(y) - latestPub(x))
@@ -6265,6 +6315,7 @@ function renderList(filter = "") {
       });
   } else {
     addKokuusaRow(filter);
+    addBillRow(filter);
     const rooms = {};
     MEMBERS.forEach(m => m.cats.forEach(c => {
       (rooms[c.id] = rooms[c.id] || { cat: c, entries: [] }).entries.push({ member: m, entry: c });
