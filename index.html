@@ -51,11 +51,12 @@
   .bill-pin b { color: #043e80; }
   .bill-pin .sub { display: block; font-size: 12px; color: #66727d; margin-top: 3px; }
   .bill-toggle { display: flex; gap: 8px; }
-  .bill-toggle button { flex: 1; padding: 9px 6px; border-radius: 999px; border: 1px solid #043e80; background: #fff; color: #043e80; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+  .bill-toggle button { flex: 1; padding: 9px 6px; border-radius: 999px; border: 1px solid #043e80; background: #fff; color: #043e80; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; white-space: pre-line; line-height: 1.4; }
   .bill-toggle button.active { background: #043e80; color: #fff; }
   .bill-sec h3 { font-size: calc(1em + 1.5px); color: #043e80; margin-bottom: 5px; }
   .bill-sec { line-height: 1.7; font-size: 13.5px; }
   .bill-link { display: block; text-align: center; background: #eef4fb; border: 1px solid #b9cfe8; color: #043e80; border-radius: 10px; padding: 10px; font-size: 13.5px; font-weight: 700; text-decoration: none; cursor: pointer; }
+  .bill-share { display: block; width: 100%; text-align: center; background: #fff; border: 1px dashed #7ea6cf; color: #043e80; border-radius: 10px; padding: 9px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
   .bill-line { margin-bottom: 7px; }
   .bill-line:last-child { margin-bottom: 0; }
   .bill-line.bill-pt { margin-top: 12px; }
@@ -5948,7 +5949,7 @@ const BILLS = [
   "name": "消費税減税・支援金法案",
   "formal": "租税及び社会保険料による負担の軽減のための飲食料品に係る消費税率の臨時的な引下げ及び就業者負担軽減支援金の支給に関する法律案（閣法・第222回国会 提出番号1）",
   "cat": "money",
-  "asOf": "2026年11月8日時点",
+  "asOf": "2026年11月9日時点",
   "scope": "国民民主党の質疑をもとに作っています",
   "statusShort": "衆議院を通過（11月6日）。11月11日に参議院で審議入りの見通し",
   "soft": [
@@ -5963,7 +5964,7 @@ const BILLS = [
     "h": "今どこまで進んでいる？",
     "lines": [
      "衆議院は11月6日に可決ずみ（与党が賛成、国民民主党を含む野党は反対）",
-     "参議院は11月11日の本会議で審議入りの見通し（報道）。その後、新設の特別委員会で11月13日ごろから実質審議の見通し。政府・与党は12月12日の会期末までの成立を目指している"
+     "参議院は11月11日の本会議で審議入りの見通し（報道）。その後、「消費税・支援金法案に関する特別委員会」（委員長は自民党の松村祥史氏）で11月13日ごろから実質審議の見通し。政府・与党は12月12日の会期末までの成立を目指している"
     ]
    },
    {
@@ -5976,7 +5977,7 @@ const BILLS = [
    {
     "h": "何をする法案？",
     "lines": [
-     "食べ物・飲み物の消費税率を、2027年4月1日から2029年3月31日まで1%に（国税0.78%＋地方消費税）",
+     "今8%の食べ物・飲み物の消費税率を、2027年4月1日から2029年3月31日まで1%に",
      "2029年4月1日からは特別ルールが終わり、軽減税率8%にもどる",
      "下げて減る地方消費税分は、国が地方特例交付金で埋め合わせ",
      "事業者向けの特別ルール：届出・簡易課税・中間申告・値段の表示・経過的な税率の扱い",
@@ -6007,7 +6008,7 @@ const BILLS = [
    {
     "h": "成立したら",
     "lines": [
-     "2027年4月1日から2年間、食べ物・飲み物の消費税が1%に。事業者には値段の表示などの特別ルール",
+     "2027年4月1日から2年間、今8%の食べ物・飲み物の消費税が1%に。事業者には値段の表示などの特別ルール",
      "条件に当てはまる働く人に、毎年1回、支援金",
      "2029年4月1日、期間が自動で終わり、税率は8%にもどる"
     ]
@@ -6022,11 +6023,11 @@ const BILLS = [
    {
     "h": "法案の文章で、もう決まっていること",
     "lines": [
-     "下げる期間と税率：2027年4月1日〜2029年3月31日、国税0.78%（地方とあわせて1%）",
-     "終わったあと：期間を過ぎると消費税法第29条第2号の税率（軽減税率8%）があてはまる。条文に「8%」の数字はなく、8%は財務省資料による",
+     "下げる期間と税率：2027年4月1日〜2029年3月31日、今8%の食べ物・飲み物の消費税が1%に",
+     "終わったあと：期間を過ぎると、今の軽減税率8%にもどる",
      "支援金の4条件：給与等が下の線を超える／全体の所得が上の線以下／税・社会保険料の負担が基準超／配偶者の所得が上の線以下（2027・28年度は配偶者条件なし）",
      "支給は認定などから2か月以内。不正受給は3年以下の拘禁刑か100万円以下の罰金",
-     "施行から5年をめどに、実施の様子を見て見直しを考える（第36条）"
+     "支援金の制度が始まってから5年をめどに、制度がどう動いているかを見て、必要なら見直しを考える（第36条）"
     ]
    },
    {
@@ -6084,7 +6085,7 @@ const BILLS = [
     "h": "状態",
     "lines": [
      "審議中（衆議院で11月6日に可決し、参議院に送付。政府・与党は12月12日の会期末までの成立を目指している）",
-     "参議院では11月11日の本会議で審議入りする見通し（報道。趣旨説明および質疑で、高市総理が出席）。その後は新設の特別委員会に付託され、11月13日ごろから実質審議の見通し（報道）。委員会の正式名称はまだ報道されていない",
+     "参議院では11月11日の本会議で審議入りする見通し（報道。趣旨説明および質疑で、高市総理が出席）。その後は11月4日に設置された「消費税・支援金法案に関する特別委員会」（委員長は自民党の松村祥史氏、委員40人。委員長を除き与党19人・野党20人）に付託され、11月13日ごろから実質審議の見通し（報道）",
      "修正の有無・付帯決議の有無：議案ページに記載がなく、確認できていない"
     ]
    },
@@ -6154,7 +6155,7 @@ const BILLS = [
      "期間終了後：条文は「同法第29条第2号の規定にかかわらず」税率を0.78%とするもので、期間を過ぎると第29条第2号の税率が適用される。条文に「8%」の数字は書かれていない（8%は財務省の資料にもとづく：軽減税率は国税6.24%＋地方消費税1.76%）",
      "支援金の対象は、次の4つの要件をいずれも満たす就業者：勤労所得が下限超／合計所得が上限以下／税・社会保険料の負担額が基準超／配偶者の所得が上限以下。2027・2028年度は配偶者の所得要件は適用しない",
      "支給は認定または決定の日から2か月以内。不正受給は3年以下の拘禁刑または100万円以下の罰金",
-     "施行後5年を目途に施行状況を勘案して検討する（第36条）"
+     "この法律の施行後五年を目途として、施行の状況を勘案し、必要があると認めるときは、この法律の規定について検討を加え、その結果に基づいて所要の措置を講ずる（第36条第9項）"
     ]
    },
    {
@@ -8071,7 +8072,11 @@ function openBill(bill, ver) {
   body.appendChild(intro);
   const tog = document.createElement("div");
   tog.className = "bill-toggle";
-  [["soft", "やわらか版"], ["hard", "法律の言い回し（かたい版）"]].forEach(([v, label]) => {
+  const softChars = bill.soft.reduce((n, s) => n + s.lines.join("").length, 0);
+  const softMins = Math.max(1, Math.round(softChars / 600));
+  const hardChars = bill.hard.reduce((n, s) => n + s.lines.join("").length, 0);
+  const hardMins = Math.max(1, Math.round(hardChars / 600));
+  [["soft", "やわらか版\n（約" + softMins + "分で読めます）"], ["hard", "法律の言い回し版\n（約" + hardMins + "分で読めます）"]].forEach(([v, label]) => {
     const b = document.createElement("button");
     b.type = "button"; b.textContent = label;
     if (v === currentBillVer) b.className = "active";
@@ -8079,6 +8084,24 @@ function openBill(bill, ver) {
     tog.appendChild(b);
   });
   body.appendChild(tog);
+  const share = document.createElement("button");
+  share.type = "button"; share.className = "bill-share";
+  share.textContent = "🔗 このメモの共有リンクをコピー";
+  share.addEventListener("click", async () => {
+    const url = location.origin + location.pathname + "#bill-" + bill.id;
+    let ok = false;
+    try { await navigator.clipboard.writeText(url); ok = true; } catch (e) {}
+    if (!ok) {
+      const ta = document.createElement("textarea");
+      ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove();
+    }
+    share.textContent = ok ? "コピーしました ✓" : url;
+    setTimeout(() => { share.textContent = "🔗 このメモの共有リンクをコピー"; }, 2500);
+  });
+  body.appendChild(share);
   const secWrap = document.createElement("div");
   secWrap.style.display = "contents";
   body.appendChild(secWrap);
@@ -8110,6 +8133,7 @@ function openBill(bill, ver) {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
+  setHash("bill-" + bill.id);
 }
 
 const PENDING_BILLS = [];
@@ -8159,6 +8183,7 @@ function openBillIndex() {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
+  setHash("bills");
 }
 
 function renderList(filter = "") {
@@ -8351,6 +8376,7 @@ function roomArticleCount(entries, catId) {
 }
 function openCategory(catId) {
   inBillView = false;
+  setHash("");
   const group = MEMBERS.filter(m => m.cats.some(c => c.id === catId));
   if (!group.length) return;
   const cat = group[0].cats.find(c => c.id === catId);
@@ -8386,6 +8412,7 @@ function openCategory(catId) {
 
 function openThread(member) {
   inBillView = false;
+  setHash("");
   document.getElementById("threadName").textContent = member.name;
   document.getElementById("threadSub").textContent = member.articles[0].committee || "国会質疑";
   const body = document.getElementById("threadBody");
@@ -8403,6 +8430,7 @@ function openThread(member) {
 
 function isDesktop() { return window.matchMedia("(min-width: 900px)").matches; }
 document.getElementById("backBtn").addEventListener("click", () => {
+  setHash("");
   if (isDesktop()) return;
   threadView.style.display = "none";
   listView.style.display = "";
@@ -8543,7 +8571,10 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月9日（月）", count: 0, detail: "今日は質疑の予定はないけど、国会ではちょっと特別なことがあるよ。ベトナムのいちばん偉い人、トー・ラム書記長兼国家主席が衆議院の本会議場で演説するんだ（午後）。\n\n日本とベトナムは仲良しの国。ベトナムにとって日本は、いちばん格の高い「仲良しパートナー」のひとつなんだって。今年5月に高市総理がベトナムに行ったとき「日本にも来てね」と誘っていて、その約束で来てくれたんだよ。", trivia: "英語で国会を表す「Diet」は、「日」を意味するラテン語に由来すると言われているよ。会議は毎日開くもの、という意味合いなんだって。", session: "第222回臨時国会は開会から36日目、閉会まであと33日だよ。" };
+const KOKUUSA = { dateLabel: "11月10日（火）", count: 4, detail: "10:30 参）法務 水野こういち
+10:40 参）内閣 江原くみ子
+10:50 参）総務 足立康史
+14:22 衆）本会議 深作ヘスス", trivia: "参議院議員の任期は6年で、3年ごとに半分ずつ選挙をするよ。だから参議院には解散がないんだ。", session: "第222回臨時国会は開会から37日目、閉会まであと32日だよ。" };
 function openKokuusa() {
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
@@ -8576,10 +8607,21 @@ function openKokuusa() {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
+  setHash("");
   markSelected("kokuusa");
 }
 
+function setHash(h) {
+  try { history.replaceState(null, "", h ? "#" + h : location.pathname + location.search); } catch (e) {}
+}
+
 renderList();
+(function routeFromHash() {
+  const h = location.hash || "";
+  if (h === "#bills") { openBillIndex(); return; }
+  const m = h.match(/^#bill-([a-z0-9-]+)$/);
+  if (m) { const b = BILLS.find(x => x.id === m[1]); if (b) openBill(b); }
+})();
 </script>
 </body>
 </html>
