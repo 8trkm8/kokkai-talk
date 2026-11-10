@@ -10495,7 +10495,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月10日（火）", count: 4, detail: "10:30 参）法務 水野こういち\n10:40 参）内閣 江原くみ子\n10:50 参）総務 足立康史\n14:22 衆）本会議 深作ヘスス", trivia: "参議院議員の任期は6年で、3年ごとに半分ずつ選挙をするよ。だから参議院には解散がないんだ。", session: "第222回臨時国会は開会から37日目、閉会まであと32日だよ。" };
+const KOKUUSA = { dateLabel: "11月11日（水）", count: 0, detail: "質疑の予定はまだ入っていないよ", trivia: "ハチミツは腐らないことで有名だよ。古代エジプトのお墓から見つかった約3000年前のハチミツが、食べられる状態だったと伝えられているんだ。", session: "第222回臨時国会は開会から38日目、閉会まであと31日だよ。" };
 function openKokuusa() {
   viewState = { kind: "kokuusa" };
   billBack = null;
