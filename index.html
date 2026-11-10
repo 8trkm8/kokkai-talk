@@ -5967,7 +5967,6 @@ bubbles: [
 memo: "前回の「調達先」に続き、今回は「輸送の保険」。再保険の仕組みから上限・監督・求償まで制度の骨格を確認する質疑。\n民間の支払い能力の確認方法は議員が聞き直しても「引受能力を踏まえて設定」の繰り返しで、議員は「おいおい決めていくと理解」と述べた。\n大臣は結びで「経済安全保障を念頭に置いた経済合理性がニューノーマル」と述べ、調達多角化を続ける姿勢を示した。"
 },
 ]},
-,
   { id: "fukasaku", cats: [{ id: "defense", label: "防衛", icon: "🛡️", preview: "重要施設周辺の土地取得に事前許可制、区域の1000メートル超への拡大は否定、国会報告もしない方針" }, { id: "justice", label: "法務・人権", icon: "⚖️", preview: "法人の実質的支配者の届出制度、外国法人にも届出義務と罰則、不許可への審査請求にも対応" }], name: "深作ヘスス", initial: "深", dateLabel: "11/10", unread: 1, addedOn: "2026-11-10",
     preview: "規制を実際に機能させる体制と国民の権利保護の両面を問い、政府は区域の拡大と国会報告には応じなかった。",
     articles: [{
@@ -9889,6 +9888,15 @@ const BILLS = [
 
 /* ===== bill memo (法案メモ) ===== */
 let currentBill = null, currentBillVer = "soft", inBillView = false;
+let viewState = { kind: "list" };
+let billBack = null;
+function scrollToAnchor(anchor) {
+  if (!anchor) return;
+  requestAnimationFrame(() => {
+    const els = document.querySelectorAll("#threadBody [data-anchor]");
+    for (const el of els) { if (el.dataset.anchor === anchor) { el.scrollIntoView({ block: "start" }); break; } }
+  });
+}
 function billForUrl(url) { return BILLS.find(b => b.articleUrls.includes(url)) || null; }
 function billForArticle(a) {
   if (!a.fullUrl) return null;
@@ -9920,7 +9928,11 @@ function jumpToArticle(member, a) {
     for (const el of chips) { if (el.dataset.anchor === key) { el.scrollIntoView({ block: "start" }); break; } }
   });
 }
-function openBill(bill, ver) {
+function openBill(bill, ver, fromAnchor) {
+  if (viewState.kind !== "bill") {
+    billBack = { kind: viewState.kind, memberId: viewState.memberId || null, catId: viewState.catId || null, anchor: fromAnchor || null };
+  }
+  viewState = { kind: "bill", billId: bill.id };
   currentBill = bill; currentBillVer = ver || "soft";
   document.getElementById("threadName").textContent = "📋 法案メモ：" + bill.name;
   document.getElementById("threadSub").textContent = bill.formal;
@@ -10016,6 +10028,8 @@ function addBillRow(filter) {
 }
 function openBillIndex() {
   inBillView = false;
+  viewState = { kind: "billIndex" };
+  billBack = null;
   document.getElementById("threadName").textContent = "📋 法案メモ";
   document.getElementById("threadSub").textContent = "法案の一覧（国民民主党の質疑をもとに作っています）";
   const body = document.getElementById("threadBody");
@@ -10147,7 +10161,7 @@ function renderArticle(body, member, a) {
       const bl = document.createElement("a");
       bl.className = "bill-chip"; bl.href = "#";
       bl.textContent = "📋 法案メモ：" + b.name;
-      bl.addEventListener("click", ev => { ev.preventDefault(); openBill(b); });
+      bl.addEventListener("click", ev => { ev.preventDefault(); openBill(b, null, member.id + "|" + (a.fullUrl || a.noteUrl || "") + "|" + a.title); });
       wrap.appendChild(bl);
     });
     body.appendChild(wrap);
@@ -10244,6 +10258,8 @@ function roomArticleCount(entries, catId) {
 }
 function openCategory(catId) {
   inBillView = false;
+  viewState = { kind: "category", catId: catId };
+  billBack = null;
   setHash("");
   const group = MEMBERS.filter(m => m.cats.some(c => c.id === catId));
   if (!group.length) return;
@@ -10280,6 +10296,8 @@ function openCategory(catId) {
 
 function openThread(member) {
   inBillView = false;
+  viewState = { kind: "thread", memberId: member.id };
+  billBack = null;
   setHash("");
   document.getElementById("threadName").textContent = member.name;
   document.getElementById("threadSub").textContent = member.articles[0].committee || "国会質疑";
@@ -10300,6 +10318,19 @@ function isDesktop() { return window.matchMedia("(min-width: 900px)").matches; }
 document.getElementById("backBtn").addEventListener("click", () => {
   setHash("");
   if (isDesktop()) return;
+  if (viewState.kind === "bill" && billBack && billBack.kind !== "list") {
+    const back = billBack;
+    billBack = null;
+    if (back.kind === "thread") {
+      const m = MEMBERS.find(x => x && x.id === back.memberId);
+      if (m) { openThread(m); scrollToAnchor(back.anchor); return; }
+    } else if (back.kind === "category") {
+      openCategory(back.catId); return;
+    } else if (back.kind === "billIndex") {
+      openBillIndex(); return;
+    }
+  }
+  viewState = { kind: "list" };
   threadView.style.display = "none";
   listView.style.display = "";
 });
@@ -10441,6 +10472,8 @@ document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
 const KOKUUSA = { dateLabel: "11月10日（火）", count: 4, detail: "10:30 参）法務 水野こういち\n10:40 参）内閣 江原くみ子\n10:50 参）総務 足立康史\n14:22 衆）本会議 深作ヘスス", trivia: "参議院議員の任期は6年で、3年ごとに半分ずつ選挙をするよ。だから参議院には解散がないんだ。", session: "第222回臨時国会は開会から37日目、閉会まであと32日だよ。" };
 function openKokuusa() {
+  viewState = { kind: "kokuusa" };
+  billBack = null;
   document.getElementById("threadName").textContent = "こくうさ";
   document.getElementById("threadSub").textContent = "毎朝7時に配信";
   const body = document.getElementById("threadBody");
