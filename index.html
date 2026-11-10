@@ -145,7 +145,7 @@ mark.hit.current{background:#ff7b00;color:#fff;}
   #listView .talk-list { flex: 1; overflow-y: auto; }
   #threadView { flex: 1; min-width: 0; height: 100vh; }
   #threadView .thread-body { overflow-y: auto; }
-  #threadView .back { display: none; }
+  /* back button is shown on desktop as well (bill-memo restore) */
   .placeholder { display: flex; flex: 1; align-items: center; justify-content: center; color: #66727d; font-size: 14px; background: #b9c9dd; }
 }
 </style>
@@ -9929,7 +9929,8 @@ function jumpToArticle(member, a) {
   });
 }
 function openBill(bill, ver, fromAnchor) {
-  if (viewState.kind !== "bill") {
+  const enteringBill = viewState.kind !== "bill";
+  if (enteringBill) {
     billBack = { kind: viewState.kind, memberId: viewState.memberId || null, catId: viewState.catId || null, anchor: fromAnchor || null };
   }
   viewState = { kind: "bill", billId: bill.id };
@@ -10008,7 +10009,11 @@ function openBill(bill, ver, fromAnchor) {
   if (!isDesktop()) listView.style.display = "none";
   threadView.style.display = "flex";
   window.scrollTo(0, 0);
-  setHash("bill-" + bill.id);
+  if (enteringBill && location.hash !== "#bill-" + bill.id) {
+    try { history.pushState(null, "", "#bill-" + bill.id); } catch (e) { setHash("bill-" + bill.id); }
+  } else {
+    setHash("bill-" + bill.id);
+  }
 }
 
 const PENDING_BILLS = [];
@@ -10315,22 +10320,42 @@ function openThread(member) {
 }
 
 function isDesktop() { return window.matchMedia("(min-width: 900px)").matches; }
+function restoreBillBack() {
+  if (!billBack || billBack.kind === "list") return false;
+  const back = billBack;
+  billBack = null;
+  if (back.kind === "thread") {
+    const m = MEMBERS.find(x => x && x.id === back.memberId);
+    if (m) { openThread(m); scrollToAnchor(back.anchor); return true; }
+    return false;
+  }
+  if (back.kind === "category") { openCategory(back.catId); return true; }
+  if (back.kind === "billIndex") { openBillIndex(); return true; }
+  return false;
+}
+window.addEventListener("popstate", () => {
+  const h = location.hash || "";
+  const mm = h.match(/^#bill-([a-z0-9-]+)$/);
+  if (mm) {
+    const b = BILLS.find(x => x && x.id === mm[1]);
+    if (b && viewState.kind !== "bill") openBill(b);
+    return;
+  }
+  if (h === "#bills") { if (viewState.kind !== "billIndex") openBillIndex(); return; }
+  if (viewState.kind === "bill") restoreBillBack();
+});
 document.getElementById("backBtn").addEventListener("click", () => {
   setHash("");
-  if (isDesktop()) return;
-  if (viewState.kind === "bill" && billBack && billBack.kind !== "list") {
-    const back = billBack;
-    billBack = null;
-    if (back.kind === "thread") {
-      const m = MEMBERS.find(x => x && x.id === back.memberId);
-      if (m) { openThread(m); scrollToAnchor(back.anchor); return; }
-    } else if (back.kind === "category") {
-      openCategory(back.catId); return;
-    } else if (back.kind === "billIndex") {
-      openBillIndex(); return;
-    }
-  }
+  if (viewState.kind === "bill" && restoreBillBack()) return;
   viewState = { kind: "list" };
+  if (isDesktop()) {
+    document.getElementById("threadBody").innerHTML = "";
+    document.getElementById("threadName").textContent = "";
+    document.getElementById("threadSub").textContent = "";
+    document.getElementById("threadPlaceholder").style.display = "";
+    document.getElementById("findBar").style.display = "none";
+    return;
+  }
   threadView.style.display = "none";
   listView.style.display = "";
 });
