@@ -11577,7 +11577,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月11日（水）", count: 7, detail: "10:31 衆）内閣 野村美穂\n10:41 衆）文部科学 西岡よしたか\n10:46 参）本会議 竹詰ひとし\n11:12 衆）厚生労働 井戸まさえ\n11:40 衆）厚生労働 日野さりあ\n14:10 参）消費者問題特別 舟山やすえ\n14:30 参）消費者問題特別 田村まみ", trivia: "ハチミツは腐らないことで有名だよ。古代エジプトのお墓から見つかった約3000年前のハチミツが、食べられる状態だったと伝えられているんだ。", session: "第222回臨時国会は開会から38日目、閉会まであと31日だよ。" };
+const KOKUUSA = { dateLabel: "11月12日（木）", count: 5, detail: "10:21 衆）憲法 玉木雄一郎\n10:30 参）総務 奥村よしひろ\n10:35 参）環境 浜野よしふみ\n10:44 参）厚生労働 浜口誠\n10:47 参）外交防衛 山田吉彦", trivia: "「OK」という言葉は、1839年にアメリカの新聞で略語のジョークとして登場したのが始まり、と言われているよ。今や世界中で通じる言葉だね。", session: "第222回臨時国会は開会から39日目、閉会まであと30日だよ。" };
 function openKokuusa() {
   viewState = { kind: "kokuusa" };
   billBack = null;
