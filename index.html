@@ -12804,7 +12804,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月17日（火）", count: 4, detail: "10:30 参）法務 小林さやか\n11:30 参）経済産業 平戸航太\n13:00 参）内閣 牛田まゆ\n13:30 参）内閣 江原くみ子", trivia: "タコの心臓は3つあるよ。泳ぐときはそのうち1つが止まるので、タコは泳ぐより歩く方が好きなんだ。", session: "第222回臨時国会は開会から44日目、閉会まであと25日だよ。" };
+const KOKUUSA = { dateLabel: "11月18日（水）", count: 5, detail: "10:25 衆）内閣 森ようすけ\n11:55 衆）政治改革 古川元久\n14:14 衆）内閣 森ようすけ\n14:26 参）ODA 奥村よしひろ\n14:42 参）憲法 足立康史", trivia: "猫がゴロゴロ鳴らす音の周波数は、骨や筋肉の回復を助ける可能性が研究されているんだって。癒やしの音には理由があるのかも。", session: "第222回臨時国会は開会から45日目、閉会まであと24日だよ。" };
 function openKokuusa() {
   viewState = { kind: "kokuusa" };
   billBack = null;
