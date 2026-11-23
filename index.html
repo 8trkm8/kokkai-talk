@@ -13433,7 +13433,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月20日（金）", count: 7, detail: "10:30 衆）政治改革 橋本みきひこ\n11:00 衆）経済産業 丹野みどり\n11:09 参）こども・子育て・若者 小林さやか\n11:30 衆）経済産業 鈴木よしひろ\n13:20 衆）内閣 野村みほ\n14:00 参）沖縄・北方・地方 山田吉彦\n14:09 衆）内閣 森ようすけ", trivia: "日本語の「ゐ」と「ゑ」は、戦後の新しい仮名遣いで使われなくなった文字だよ。古い看板で見かけることがあるかも。", session: "第222回臨時国会は開会から47日目、閉会まであと22日だよ。" };
+const KOKUUSA = { dateLabel: "11月24日（火）", count: 6, detail: "10:35 参）内閣 牛田まゆ\n10:40 参）法務 水野こういち\n11:37 衆）震災原子力 おだけかい\n衆）震災原子力 鍋島せり\n14:20 参）消費税・支援金 上田清司\n15:25 衆）政治改革 臼木ひでたけ", trivia: "日本の自動販売機は、飲み物用だけでも200万台以上あるんだって。人口あたりの多さは世界でもトップクラスだよ。", session: "第222回臨時国会は開会から51日目、閉会まであと18日だよ。" };
 function openKokuusa() {
   viewState = { kind: "kokuusa" };
   billBack = null;
