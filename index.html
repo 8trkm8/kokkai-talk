@@ -13688,7 +13688,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月25日（水）", count: 5, detail: "9:20 衆）内閣 森ようすけ\n10:20 衆）国土交通 臼木ひでたけ\n10:25 衆）経済産業 鈴木よしひろ\n10:40 衆）国土交通 野村みほ\n13:58 衆）拉致問題等 深作ヘスス", trivia: "衆議院の任期は4年だけど、解散があるから実際に4年満了することはめったにないんだ。戦後、任期満了までいったのは数えるほどだよ。", session: "第222回臨時国会は開会から52日目、閉会まであと17日だよ。" };
+const KOKUUSA = { dateLabel: "11月26日（木）", count: 4, detail: "10:43 衆）憲法 玉木雄一郎\n10:47 参）外交防衛 山田吉彦\n11:10 衆）政治改革 おだけかい\n11:20 参）経済産業 平戸航太", trivia: "「委員会」という言葉、英語では committee。「ゆだねる」という意味のラテン語が語源と言われているよ。仕事をゆだねられた人たちの集まり、ってことだね。", session: "第222回臨時国会は開会から53日目、閉会まであと16日だよ。" };
 function openKokuusa() {
   viewState = { kind: "kokuusa" };
   billBack = null;
