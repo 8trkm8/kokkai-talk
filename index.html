@@ -13819,7 +13819,7 @@ document.getElementById("findPrev").addEventListener("click", () => {
 document.getElementById("findInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); runFind(); } });
 document.getElementById("findInput").addEventListener("search", runFind);
 /* こくうさ: questioning count + trivia (refreshed by the 7:00 daily delivery) */
-const KOKUUSA = { dateLabel: "11月26日（木）", count: 4, detail: "10:43 衆）憲法 玉木雄一郎\n10:47 参）外交防衛 山田吉彦\n11:10 衆）政治改革 おだけかい\n11:20 参）経済産業 平戸航太", trivia: "「委員会」という言葉、英語では committee。「ゆだねる」という意味のラテン語が語源と言われているよ。仕事をゆだねられた人たちの集まり、ってことだね。", session: "第222回臨時国会は開会から53日目、閉会まであと16日だよ。" };
+const KOKUUSA = { dateLabel: "11月27日（金）", count: 1, detail: "10:35 参）本会議 はが道也", trivia: "質問主意書っていって、国会議員は国会が開いていない間も文書で政府に質問できるよ。政府は原則7日以内に答弁書を出す決まりなんだ。", session: "第222回臨時国会は開会から54日目、閉会まであと15日だよ。" };
 function openKokuusa() {
   viewState = { kind: "kokuusa" };
   billBack = null;
